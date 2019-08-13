@@ -274,15 +274,19 @@ contract Magnet is IERC20, IMagnet{
         return true;
     }
 
+
+    function getTokenPrice() public view returns (uint256) {
+        return tokenPrice;
+    }
+
     /**
      * @dev 교환 요청을 받은 경우 동작하는 함수.
      * @return 정상적으로 함수 동작 시 true 반환
      */
-    function buyTokens() public payable returns (bool) {
-        uint tokensToBuy = msg.value / tokenPrice;
-        require(balances[msg.sender] + tokensToBuy >= balances[msg.sender], "OverFlow Occured"); // watch for overflow
+    function buyTokens(uint tokensToBuy, address user) public onlyOwner returns (bool) {
+        require(balances[user] + tokensToBuy >= balances[msg.sender], "OverFlow Occured"); // watch for overflow
         require(suppliableAmount >= tokensToBuy, "Not enough Suppliable Tokens"); // check suppliable token amounts
-        balances[msg.sender] += tokensToBuy;
+        balances[user] += tokensToBuy;
         suppliableAmount -= tokensToBuy;
         return true;
     }
