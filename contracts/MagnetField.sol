@@ -37,8 +37,8 @@ contract MagnetField is IERC20, IMagnetField{
         name = "MagnetField";
         symbol = "MGF";
         decimals = 8;
-        totalSupply = INITIAL_SUPPLY ** 10 ** uint(decimals);
-        suppliableAmount = INITIAL_SUPPLY ** 10 ** uint(decimals);
+        totalSupply = INITIAL_SUPPLY * 10 ** uint(decimals);
+        suppliableAmount = INITIAL_SUPPLY * 10 ** uint(decimals);
     }
 
     modifier onlyOwner() {

@@ -13,7 +13,9 @@ contract GameController {
         bytes32 gameHex; // use for transparency. (when start the game, )
         bytes1 difficulty; // EZ, NM, HD - necessary?
         GameResult result; //default : false ***true: win the game, false: lose the game
+
         bool[3] useItem; //default: false(SHIELD), false(FirstCell), false(ShowMap)
+
     }
 
     struct UserInfo {
@@ -48,7 +50,9 @@ contract GameController {
     // Event Lists
 
     // when users start the game
+
     event START(bytes1 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)
+
     // event START_ERR_ITEM();
     // event START_ERR_TOKEN();
 
@@ -114,7 +118,6 @@ contract GameController {
 
         require(_gameCost == BET_TOKEN_AMOUNT, "You Does not bet 10 Magnet Tokens"); // Is gameCost same as the BET_TOKEN_AMOUNT
         require(Magnet(tokensAddr[0]).balanceOf(msg.sender) >= BET_TOKEN_AMOUNT, "Not Enough Magnet Tokens"); // check Magnet balance of Users.
-
         if(user = 0x0) { // No User Data (Newbie)
             register();
         }
@@ -147,15 +150,17 @@ contract GameController {
      * @param _gameHex 기존 게임 로그와의 비교를 통해 조작 여부를 확인한다.
      * @param _isWinner 게임 승리 여부를 확인하기 위한 bool parameter
      */
+
     function endGame(bytes32 _gameHex, bool _isWinner) private {
         userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
-        // chech user is in contract's database.
+        // check user is in contract's database.
         require(user != 0x0, "No User Data");
 
         GameLog log = user.logs[totalGameCount];
         // _gameHex recheck(compare with log's hex value)
+
         require(log.gameHex == _gameHex, "No such Game in logs");
 
         //update game result. and reward to users depending on the result of final game.
@@ -176,6 +181,7 @@ contract GameController {
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
     function rewardWinner(bytes1 _difficulty) internal returns (bool) {
+
         require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "Revert from Magnet : rewardWinner");
         require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardWinner");
         return true;
@@ -187,6 +193,7 @@ contract GameController {
      */
     function rewardLoser(bytes1 _difficulty) internal returns (bool) {
         require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardLoser");
+
         return true;
     }
 
