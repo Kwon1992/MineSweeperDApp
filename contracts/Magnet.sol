@@ -24,8 +24,8 @@ contract Magnet is ERC20{
         name = "Magnet";
         symbol = "MG";
         decimals = 8;
-        _totalSupply = INITIAL_SUPPLY ** 10 ** uint(decimals);
-        _suppliableAmount = INITIAL_SUPPLY ** 10 ** uint(decimals);
+        _totalSupply = INITIAL_SUPPLY * 10 ** uint(decimals);
+        _suppliableAmount = INITIAL_SUPPLY * 10 ** uint(decimals);
         tokenPrice = 100000000000000; // 0.0001ETH = 1 MAGNET
     }
 
@@ -85,7 +85,7 @@ contract Magnet is ERC20{
         return true;
     }
 
-    function buyTokens() payable public returns (bool) {
+    function buyTokens() public payable returns (bool) {
         uint tokensToBuy = msg.value / tokenPrice;
         require(balances[msg.sender] + tokensToBuy >= balances[msg.sender], "OverFlow Occured"); // watch for overflow
         require(_suppliableAmount >= tokensToBuy, "Not enough Suppliable Tokens"); // check suppliable token amounts

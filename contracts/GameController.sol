@@ -11,14 +11,14 @@ contract GameController {
     // user DB structure
     struct GameLog { // use for game log!
         bytes32 gameHex; // use for transparency. (when start the game, )
-        bytes1 difficulty; // EZ, NM, HD - necessary? 
-        GameResult result; //default : false ***true: win the game, false: lose the game 
+        bytes1 difficulty; // EZ, NM, HD - necessary?
+        GameResult result; //default : false ***true: win the game, false: lose the game
         bool useItem; //default: false
     }
 
     struct UserInfo {
         address payable gamerID; // User account address
-        uint256 totalGameCount;  // to tracking recent gameResult. 
+        uint256 totalGameCount;  // to tracking recent gameResult.
         bool isPlaying; // check progress of the game
         mapping (uint256 => GameLog) logs; // start from 0 to N.... (game result log)
     }
@@ -28,7 +28,7 @@ contract GameController {
         tokensAddr[0] = address(new Magnet(msg.sender));
         tokensAddr[1] = address(new MagnetField(msg.sender));
     }
-    
+
 
     // https://ethereum.stackexchange.com/questions/7713/how-does-mapping-work (참고.. mapping 동작 방식)
 

@@ -3,7 +3,7 @@ pragma solidity ^0.5.2;
 import 'node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
 // 1 Manget == 100 MagnetField
-contract Magnet is ERC20{
+contract MagnetField is ERC20{
     // ERC20 functions are implemeted by parent contract(ERC20 by Openzeppelin)
 
     // constant variables
@@ -22,7 +22,7 @@ contract Magnet is ERC20{
         name = "MagnetField";
         symbol = "MGF";
         decimals = 8;
-        _totalSupply = INITIAL_SUPPLY ** 10 ** uint(decimals);
+        _totalSupply = INITIAL_SUPPLY * 10 ** uint(decimals);
     }
 
     modifier onlyOwner() {
@@ -32,7 +32,7 @@ contract Magnet is ERC20{
 
 
 
-    // Events are implemented in IERC20.sol 
+    // Events are implemented in IERC20.sol
     /*
         event Transfer(address indexed from, address indexed to, uint256 value);
         event Approval(address indexed owner, address indexed spender, uint256 value);
