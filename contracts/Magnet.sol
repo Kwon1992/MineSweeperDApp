@@ -37,7 +37,7 @@ contract Magnet is ERC20{
 
 
 
-    // Events are implemented in IERC20.sol 
+    // Events are implemented in IERC20.sol
     /*
         event Transfer(address indexed from, address indexed to, uint256 value);
         event Approval(address indexed owner, address indexed spender, uint256 value);
@@ -73,7 +73,7 @@ contract Magnet is ERC20{
     //     super(spender, addedValue);
     // }
 
- 
+
     // function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
     //     super(spender, subtractedValue);
     // }
@@ -85,7 +85,7 @@ contract Magnet is ERC20{
         return true;
     }
 
-    function buyTokens() payable public returns (bool) {
+    function buyTokens() public payable returns (bool) {
         uint tokensToBuy = msg.value / tokenPrice;
         require(balances[msg.sender] + tokensToBuy >= balances[msg.sender], "OverFlow Occured"); // watch for overflow
         require(_suppliableAmount >= tokensToBuy, "Not enough Suppliable Tokens"); // check suppliable token amounts
