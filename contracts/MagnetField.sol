@@ -26,7 +26,6 @@ contract MagnetField is ERC20{
 <<<<<<< HEAD
         _totalSupply = INITIAL_SUPPLY * 10 ** uint(decimals);
 =======
-        _suppliableAmount = INITIAL_SUPPLY ** 10 ** uint(decimals);
 >>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
     }
 

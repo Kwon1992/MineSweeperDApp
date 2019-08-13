@@ -52,7 +52,6 @@ contract GameController {
 
     // when users start the game
 <<<<<<< HEAD
-    event START(bytes1 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount);//BombHex -> keccak256(bombCoords)
 =======
     event START(bytes1 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)
 >>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
