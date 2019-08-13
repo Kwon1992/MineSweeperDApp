@@ -1,7 +1,7 @@
-pragma solidity ^0.5.2;
+pragma solidity ^0.5.0;
 
-import './Magnet.sol';
-import './MagnetField.sol';
+import './IMagnet.sol';
+import './IMagnetField.sol';
 
     // 맨 처음 게임을 시작하는 사람들 (즉, 정보가 입력되어있지 않은 사람들..에 대한 처리가 필요)
 contract GameController {
@@ -137,7 +137,7 @@ contract GameController {
         useItems(log.useItem);
 
         // substract 10 Magnet Tokens
-        Magnet(tokensAddr[0]).payToGamePlay();
+        Magnet(tokensAddr[0]).payToGamePlay(msg.sender);
         emit START(_difficulty, _gameHex, _useItem, user.totalGameCount);
     }
 
