@@ -11,7 +11,7 @@ contract GameController {
     // user DB structure
     struct GameLog { // use for game log!
         bytes32 gameHex; // use for transparency. (when start the game, )
-        bytes1 difficulty; // EZ, NM, HD - necessary?
+        bytes2 difficulty; // EZ, NM, HD - necessary?
         GameResult result; //default : false ***true: win the game, false: lose the game
 
         bool[3] useItem; //default: false(SHIELD), false(FirstCell), false(ShowMap)
@@ -51,7 +51,7 @@ contract GameController {
 
     // when users start the game
 
-    event START(bytes1 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)
+    event START(bytes2 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)
 
     // event START_ERR_ITEM();
     // event START_ERR_TOKEN();
@@ -105,14 +105,14 @@ contract GameController {
      *
      *struct GameResult { // use for game log!
      * bytes32 gameHex; // use for transparency. (when start the game, )
-     * bytes1 difficulty; // EZ, NM, HD - necessary?
+     * bytes2 difficulty; // EZ, NM, HD - necessary?
      * bool isWinner; //default : false ***true: win the game, false: lose the game
      * bool useItem; //default: false
      *}
      * @param difficulty 게임의 난이도를 front-end에서 받아온다.
      * @param gameCost 게임 시작에 사용한 Magnet 토큰 양을 front-end에서 받아온다.
      */
-    function startGame(bytes1 _difficulty, uint8 _gameCost, bytes32 _gameHex, bool[3] _useItem) private {
+    function startGame(bytes2 _difficulty, uint8 _gameCost, bytes32 _gameHex, bool[3] _useItem) private {
         userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
@@ -180,7 +180,7 @@ contract GameController {
      * @dev 승리한 유저에게 게임 보상을 한다
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
-    function rewardWinner(bytes1 _difficulty) internal returns (bool) {
+    function rewardWinner(bytes2 _difficulty) internal returns (bool) {
 
         require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "Revert from Magnet : rewardWinner");
         require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardWinner");
@@ -191,7 +191,7 @@ contract GameController {
      * @dev 패배한 유저에게 게임 보상을 한다
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
-    function rewardLoser(bytes1 _difficulty) internal returns (bool) {
+    function rewardLoser(bytes2 _difficulty) internal returns (bool) {
         require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardLoser");
 
         return true;
@@ -216,7 +216,7 @@ contract GameController {
      * @param index  알고싶은 게임번호
      * @return 최근 게임의 난이도와를 반환한다.
      */
-    function getGameResults(uint256 index) internal view returns (bytes1 difficulty, uint result) {
+    function getGameResults(uint256 index) internal view returns (bytes2 difficulty, uint result) {
         if (users[keccak256(abi.encodePacked(msg.sender))] = 0) {
             return;
         }
