@@ -6,11 +6,11 @@ import './MagnetField.sol';
     // 맨 처음 게임을 시작하는 사람들 (즉, 정보가 입력되어있지 않은 사람들..에 대한 처리가 필요)
 contract GameController {
 
-
     // variables
     address[2] private tokensAddr;
     address payable public owner;
-    mapping (bytes32 => UserInfo) private users;
+
+    mapping (bytes32 => UserInfo) public users;
 
     // user DB structure
     struct GameLog { // use for game log!
@@ -24,6 +24,7 @@ contract GameController {
         address gamerID; // User account address
         uint256 totalGameCount;  // to tracking recent gameResult.
         bool isPlaying; // check progress of the game
+        bool isExistUser;
         mapping (uint256 => GameLog) logs; // start from 0 to N.... (game result log)
     }
 
@@ -59,6 +60,7 @@ contract GameController {
     // when the game is over.
     event WIN();
     event LOSE();
+    event REGISTER();
 
 
     function buyMagnet() public payable returns (bool) {
@@ -82,11 +84,15 @@ contract GameController {
      * bool isPlaying;
      *}
      */
-    function register() internal {
-        bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
-        users[userIdentificator].gamerID = msg.sender;
-        users[userIdentificator].totalGameCount = 0;
-        users[userIdentificator].isPlaying = false;
+    function register(bytes32 userIdentificator) private {
+        UserInfo storage user = users[userIdentificator];
+
+        user.gamerID = msg.sender;
+        user.totalGameCount = 0;
+        user.isPlaying = false;
+        user.isExistUser = true;
+
+        emit REGISTER();
     }
 
     /**
@@ -94,7 +100,7 @@ contract GameController {
      * @param _useItems 각 아이템에 대한 선택 여부 정보를 가진 parameter
      * @return 정상적으로 수행된 경우 true값을 반환한다.
      */
-    function useItems(bool[3] memory _useItems) internal returns (bool){
+    function useItems(bool[3] memory _useItems) public returns (uint256){ // internal로 바꿀 예정
         uint256 totalItemCost = 0;
         if(_useItems[0]) totalItemCost += 7000;
         if(_useItems[1]) totalItemCost += 10000;
@@ -102,7 +108,7 @@ contract GameController {
         if(totalItemCost != 0) {
             MagnetField(tokensAddr[1]).buyItems(totalItemCost, msg.sender);
         }
-        return true;
+        return totalItemCost;
     }
     /**
      * @dev 게임 시작 시 실행되는 함수로써 유저정보 최신화 및 게임로그 기록을 한 후 START 이벤트를 발생시킨다.
@@ -111,6 +117,7 @@ contract GameController {
      * uint256 totalGameCount;  // to tracking recent GameResult.
      * mapping (uint256 => GameResult) results; // start from 0 to N.... (game result log)
      * bool isPlaying;
+     * bool isExistUser;
      *}
      *
      *
@@ -125,27 +132,33 @@ contract GameController {
      * @param _gameHex 게임의 transparency를 위한 sha256 value를 front-end에서 받아온다.
      * @param _gameCost 게임 시작에 사용한 Magnet 토큰 양을 front-end에서 받아온다.
      */
-
-    function startGame(bytes2 _difficulty, uint8 _gameCost, bytes32  _gameHex, bool[3] memory _useItem) public {
+    function startGame(bytes2 _difficulty, uint8 _gameCost, bytes32  _gameHex, bool[3] memory _useItem) public{
         bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
         require(_gameCost == BET_TOKEN_AMOUNT, "You Does not bet 10 Magnet Tokens"); // Is gameCost same as the BET_TOKEN_AMOUNT
         require(Magnet(tokensAddr[0]).balanceOf(msg.sender) >= BET_TOKEN_AMOUNT, "Not Enough Magnet Tokens"); // check Magnet balance of Users.
-        if(user.gamerID == address(0)) { // No User Data (Newbie)
-            register();
+        if(!(user.isExistUser)) { // No User Data (Newbie)
+            register(userIdentificator);
         }
 
-        require(user.gamerID != address(0), "No User Data");
-        // change isplaying flag and update totalGameCount
+        
+
+        //double check user existence
+        require(user.isExistUser, "No User Data : startGame");
+        // change isPlaying flag and update totalGameCount
         user.isPlaying = true;
         user.totalGameCount += 1;
 
         // write game log
         GameLog storage log = user.logs[user.totalGameCount];
+        log.difficulty = _difficulty;
         log.gameHex = _gameHex;
         log.result = GameResult.LOSE;
-        log.useItem = _useItem; // 에러 날만한 부분...
+
+        for (uint i=0 ; i<3; i++) {
+            log.useItem[i] = _useItem[i];
+        }
 
         // decrease MagnetField (if use items)
         useItems(log.useItem);
@@ -162,38 +175,44 @@ contract GameController {
      * @param _isWinner 게임 승리 여부를 확인하기 위한 bool parameter
      */
 
-    function endGame(bytes32 _gameHex, bool _isWinner) private {
+    function endGame(bytes32 _gameHex, bool _isWinner) public { 
         bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
         // check user is in contract's database.
-        require(user.gamerID == address(0x0), "No User Data");
+        require(user.isExistUser, "No User Data: endGame");
 
-        GameLog storage log = user.logs[user.totalGameCount];
-        // _gameHex recheck(compare with log's hex value)
+        GameLog storage log = user.logs[user.totalGameCount]; 
+        // _gameHex recheck(compare with log's hex value :: RECENT GAME!!)
 
-        require(log.gameHex == _gameHex, "No such Game in logs");
+        require(log.gameHex == _gameHex, "No such Game in logs: endGame");
 
         //update game result. and reward to users depending on the result of final game.
-        if(_isWinner) { // ture : WIN, false : LOSE [get values from front-end game]
+       // ture : WIN, false : LOSE [get values from front-end game]
+       if(_isWinner){
             log.result = GameResult.WIN;
-            if(rewardWinner(log.difficulty)) emit WIN();
-            //보상 Magnet 과 MagnetField...
-
         } else {
-            //보상 MagnetField만...
             log.result = GameResult.LOSE;
-            if(rewardLoser(log.difficulty)) emit LOSE();
         }
+
+        rewardUser(log.difficulty, _isWinner);
+        //보상 Magnet 과 MagnetField...
+
     }
 
     /**
-     * @dev 승리한 유저에게 게임 보상을 한다
+     * @dev 유저의 게임결과에 따라 보상을 지급한다
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
-    function rewardWinner(bytes2 _difficulty) internal returns (bool) {
-        require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "Revert from Magnet : rewardWinner");
-        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardWinner");
+    function rewardUser(bytes2 _difficulty, bool _isWinner) internal returns (bool) {
+        if(_isWinner) {
+            require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "Revert from Magnet : rewardUser");
+            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardUser");
+            emit WIN();
+        } else {
+            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardUser");
+            emit LOSE();
+        }
         return true;
     }
 
@@ -201,20 +220,20 @@ contract GameController {
      * @dev 패배한 유저에게 게임 보상을 한다
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
-    function rewardLoser(bytes2 _difficulty) internal returns (bool) {
-        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardLoser");
-        return true;
-    }
+    // function rewardLoser(bytes2 _difficulty) internal returns (bool) {
+    //     require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardLoser");
+    //     return true;
+    // }
 
 
     /**
      * @dev 특정 유저의 총 게임 횟수를 반환한다.
      * @return 특정 유저의 총 게임 횟수.
      */
-    function getTotalGameCount() internal view returns (uint256) {
-        UserInfo memory user = users[keccak256(abi.encodePacked(msg.sender))];
-        return user.totalGameCount;
-    }
+    // function getTotalGameCount() public view returns (uint256) {
+    //     UserInfo memory user = users[keccak256(abi.encodePacked(msg.sender))];
+    //     return user.totalGameCount;
+    // }
 
     /**
      * @dev 유저의 특정(index) 게임 결과를 보여준다.
@@ -225,16 +244,17 @@ contract GameController {
      * @param index  알고싶은 게임번호
      * @return 최근 게임의 난이도와를 반환한다.
      */
-    function getGameResults(uint256 index) internal view returns (bytes2 difficulty, GameResult result) {
-        if (users[keccak256(abi.encodePacked(msg.sender))].gamerID == address(0)) {
+    function getGameResults(uint256 index) public view returns (bytes2 difficulty, GameResult result) {
+        if (users[keccak256(abi.encodePacked(msg.sender))].gamerID == address(0) || users[keccak256(abi.encodePacked(msg.sender))].totalGameCount < index) {
             difficulty = bytes2("NA");
             result = GameResult.NOT_FOUND;
-        }
-        UserInfo storage user = users[keccak256(abi.encodePacked(msg.sender))];
-        GameLog memory log = user.logs[index];
+        } else {
+            UserInfo storage user = users[keccak256(abi.encodePacked(msg.sender))];
+            GameLog storage log = user.logs[index];
 
-        difficulty = log.difficulty;
-        result = log.result;
+            difficulty = log.difficulty;
+            result = log.result;
+        }
     }
 
     /**
@@ -245,5 +265,19 @@ contract GameController {
         require(MagnetField(tokensAddr[1]).exchangeTokens(amount, msg.sender),"Revert from MagnetF : exchangeTokens"); // magnetField 토큰을 감소시킨다.
         require(Magnet(tokensAddr[0]).exchangeTokens(amount, msg.sender), "Revert from Magnet : exchangeTokens"); // magnet 토큰을 증가시킨다.
         return true;
+     }
+
+    /*
+     *struct UserInfo {
+     * address payable gamerID; // User account address
+     * uint256 totalGameCount;  // to tracking recent GameResult.
+     * mapping (uint256 => GameResult) results; // start from 0 to N.... (game result log)
+     * bool isPlaying;
+     *}
+     */
+     function getUserInfo() public view returns (address _gamerID, uint256 _totalGameCount) {
+        UserInfo storage user = users[keccak256(abi.encodePacked(msg.sender))];
+        _gamerID = user.gamerID;
+        _totalGameCount = user.totalGameCount;
      }
 }

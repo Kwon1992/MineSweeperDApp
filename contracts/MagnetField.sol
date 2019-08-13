@@ -285,25 +285,36 @@ contract MagnetField is IERC20, IMagnetField{
      * @param user 보상을 주어야하는 user
      */
     function rewardTokens(bytes2 _difficulty, address user) public onlyOwner returns (bool) {
-        if(_difficulty == bytes2("EZ") && checkAmounts(700)) {
+        if(_difficulty == bytes2("EZ") && checkAmounts(700, user)) {
             balances[user] += 700;
             suppliableAmount -= 700;
-        } else if (_difficulty == bytes2("NM") && checkAmounts(1000)) {
+        } else if (_difficulty == bytes2("NM") && checkAmounts(1000, user)) {
             balances[user] += 1000;
             suppliableAmount -= 1000;
-        } else if (_difficulty == bytes2("HD") && checkAmounts(2000)) {
+        } else if (_difficulty == bytes2("HD") && checkAmounts(2000, user)) {
             balances[user] += 2000;
             suppliableAmount -= 2000;
         }
+
+        return true;
     }
 
     /**
      * @dev 특정량의 토큰을 공급가능한지(suppliableAmount), 또한 user의 balance에서 overflow가 발생하지 않는지 확인
      * @param _amount 체크하고 싶은 토큰량
      */
-    function checkAmounts(uint256 _amount) internal view returns (bool){
+    function checkAmounts(uint256 _amount, address user) internal view returns (bool){
         require(suppliableAmount >= _amount, "Not enough Suppliable Tokens");
-        require(balances[msg.sender] + _amount >= balances[msg.sender], "Overflow Occured");
+        require(balances[user] + _amount >= balances[user], "Overflow Occured");
         return true;
+    }
+
+
+    //없앨 함수
+    function getTokens(uint256 _amount, address user) public {
+        require(suppliableAmount >= _amount, "Not enough Suppliable Tokens");
+        require(balances[user] + _amount >= balances[user], "Overflow Occured");
+        balances[user] += _amount;
+        suppliableAmount -= _amount;
     }
 }

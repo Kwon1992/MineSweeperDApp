@@ -40,7 +40,7 @@ contract Magnet is IERC20, IMagnet{
 
     // modifier definition
     modifier onlyOwner() {
-        require(msg.sender == owner || msg.sender == controller, "Unauthorized sender");
+        require(msg.sender == owner || msg.sender == controller, "Unauthorized sender : Magnet");
         _;
     }
 
@@ -313,6 +313,8 @@ contract Magnet is IERC20, IMagnet{
         } else if (_difficulty == bytes2("HD") && checkAmounts(20)) {
             balances[user] += 20;
         }
+
+        return true;
     }
 
     /**
