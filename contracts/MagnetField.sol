@@ -23,10 +23,7 @@ contract MagnetField is ERC20{
         name = "MagnetField";
         symbol = "MGF";
         decimals = 8;
-<<<<<<< HEAD
         _totalSupply = INITIAL_SUPPLY * 10 ** uint(decimals);
-=======
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
     }
 
     modifier onlyOwner() {

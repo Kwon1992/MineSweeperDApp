@@ -13,10 +13,9 @@ contract GameController {
         bytes32 gameHex; // use for transparency. (when start the game, )
         bytes1 difficulty; // EZ, NM, HD - necessary?
         GameResult result; //default : false ***true: win the game, false: lose the game
-<<<<<<< HEAD
-=======
+
         bool[3] useItem; //default: false(SHIELD), false(FirstCell), false(ShowMap)
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
+
     }
 
     struct UserInfo {
@@ -51,10 +50,9 @@ contract GameController {
     // Event Lists
 
     // when users start the game
-<<<<<<< HEAD
-=======
+
     event START(bytes1 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
+
     // event START_ERR_ITEM();
     // event START_ERR_TOKEN();
 
@@ -120,10 +118,6 @@ contract GameController {
 
         require(_gameCost == BET_TOKEN_AMOUNT, "You Does not bet 10 Magnet Tokens"); // Is gameCost same as the BET_TOKEN_AMOUNT
         require(Magnet(tokensAddr[0]).balanceOf(msg.sender) >= BET_TOKEN_AMOUNT, "Not Enough Magnet Tokens"); // check Magnet balance of Users.
-<<<<<<< HEAD
-=======
-
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
         if(user = 0x0) { // No User Data (Newbie)
             register();
         }
@@ -156,11 +150,8 @@ contract GameController {
      * @param _gameHex 기존 게임 로그와의 비교를 통해 조작 여부를 확인한다.
      * @param _isWinner 게임 승리 여부를 확인하기 위한 bool parameter
      */
-<<<<<<< HEAD
-    function endGame(bytes32 _gameHex, bool _isWinner) public {
-=======
+
     function endGame(bytes32 _gameHex, bool _isWinner) private {
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
         userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
@@ -169,11 +160,8 @@ contract GameController {
 
         GameLog log = user.logs[totalGameCount];
         // _gameHex recheck(compare with log's hex value)
-<<<<<<< HEAD
-        require((log.gameHex == _gameHex), "Game Hex does not match");
-=======
+
         require(log.gameHex == _gameHex, "No such Game in logs");
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
 
         //update game result. and reward to users depending on the result of final game.
         if(_isWinner) { // ture : WIN, false : LOSE [get values from front-end game]
@@ -193,13 +181,9 @@ contract GameController {
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
     function rewardWinner(bytes1 _difficulty) internal returns (bool) {
-<<<<<<< HEAD
-        require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "failed to reward Magnet to Winner");
-        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "failed to reward MagnetField to Winner");
-=======
+
         require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "Revert from Magnet : rewardWinner");
         require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardWinner");
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
         return true;
     }
 
@@ -208,11 +192,8 @@ contract GameController {
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
     function rewardLoser(bytes1 _difficulty) internal returns (bool) {
-<<<<<<< HEAD
-        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender),"failed to reward MagnetField to Loser");
-=======
         require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardLoser");
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
+
         return true;
     }
 
@@ -233,11 +214,7 @@ contract GameController {
      *      getTotalGameCount()를 이용해 front-end에서 최근 게임번호를 저장한뒤 이를 활용해 for loop를 돈다면
      *      확인이 가능하다.
      * @param index  알고싶은 게임번호
-<<<<<<< HEAD
-     * @return 최근 게임의 난이도를 반환한다.
-=======
      * @return 최근 게임의 난이도와를 반환한다.
->>>>>>> a8909a29725aa0b9b795790edd80e9f6661f3e19
      */
     function getGameResults(uint256 index) internal view returns (bytes1 difficulty, uint result) {
         if (users[keccak256(abi.encodePacked(msg.sender))] = 0) {
