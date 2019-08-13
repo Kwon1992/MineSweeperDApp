@@ -8,7 +8,7 @@ interface IERC20 {
     /**
      * @dev Returns the amount of tokens in existence.
      */
-    function totalSupply() external view returns (uint256);
+    function getTotalSupply() external view returns (uint256);
 
     /**
      * @dev Returns the amount of tokens owned by `account`.
