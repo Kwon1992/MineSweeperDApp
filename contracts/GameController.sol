@@ -131,7 +131,7 @@ contract GameController {
         userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
-        // chech user is in contract's database.
+        // check user is in contract's database.
         require(user != 0x0, "No User Data");
         
         GameLog log = user.logs[totalGameCount];
@@ -147,7 +147,7 @@ contract GameController {
         } else {
             //보상 MagnetField만...
             log.result = GameResult.LOSE;
-            if(rewardLoser(log.difficulty)) emit LOSE()
+            if(rewardLoser(log.difficulty)) emit LOSE();
         }
     }
 
@@ -156,8 +156,8 @@ contract GameController {
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
     function rewardWinner(bytes1 _difficulty) internal returns (bool) {
-        require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender));
-        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender));
+        require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "failed to reward Magnet to Winner");
+        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "failed to reward MagnetField to Winner");
         return true;
     }
     
@@ -166,14 +166,14 @@ contract GameController {
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
     function rewardLoser(bytes1 _difficulty) internal returns (bool) {
-        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender));
+        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender),"failed to reward MagnetField to Loser");
         return true;
     }
 
 
     /**
      * @dev 특정 유저의 총 게임 횟수를 반환한다.
-     * @return 특정 유저의 총 게임 횟수.  
+     * @return 특정 유저의 총 게임 횟수.
      */
     function getTotalGameCount() internal view returns (uint256) {
         UserInfo memory user = users[keccak256(abi.encodePacked(msg.sender))];
@@ -181,15 +181,15 @@ contract GameController {
     }
 
     /**
-     * @dev 유저의 특정(index) 게임 결과를 보여준다. 
+     * @dev 유저의 특정(index) 게임 결과를 보여준다.
      *      Solidity 특성 상 mapping을 전체 순회할 수 없기때문에 index를 활용한다.
      *      for loop는 front-end에서 돌면서 확인할 수 있도록 한다.
      *      getTotalGameCount()를 이용해 front-end에서 최근 게임번호를 저장한뒤 이를 활용해 for loop를 돈다면
      *      확인이 가능하다.
-     * @param index  알고싶은 게임번호 
-     * @return 최근 게임의 난이도와를 반환한다.  
+     * @param index  알고싶은 게임번호
+     * @return 최근 게임의 난이도를 반환한다.
      */
-    function getGameResults(uint256 index) internal view returns (bytes1 difficulty, uint result) { 
+    function getGameResults(uint256 index) internal view returns (bytes1 difficulty, uint result) {
         if (users[keccak256(abi.encodePacked(msg.sender))] = 0) {
             return;
         }
