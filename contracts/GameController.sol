@@ -48,7 +48,7 @@ contract GameController {
     // Event Lists
 
     // when users start the game
-    event START(bytes1 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)  
+    event START(bytes1 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount);//BombHex -> keccak256(bombCoords)
     // event START_ERR_ITEM();
     // event START_ERR_TOKEN();
 
@@ -62,7 +62,7 @@ contract GameController {
      *struct UserInfo {
      * address payable gamerID; // User account address
      * uint256 totalGameCount;  // to tracking recent GameResult.
-     * mapping (uint256 => GameResult) results; // start from 0 to N.... (game result log) 
+     * mapping (uint256 => GameResult) results; // start from 0 to N.... (game result log)
      * bool isPlaying;
      *}
      */
@@ -78,15 +78,15 @@ contract GameController {
      *struct UserInfo {
      * address payable gamerID; // User account address
      * uint256 totalGameCount;  // to tracking recent GameResult.
-     * mapping (uint256 => GameResult) results; // start from 0 to N.... (game result log) 
+     * mapping (uint256 => GameResult) results; // start from 0 to N.... (game result log)
      * bool isPlaying;
      *}
      *
      *
      *struct GameResult { // use for game log!
      * bytes32 gameHex; // use for transparency. (when start the game, )
-     * bytes1 difficulty; // EZ, NM, HD - necessary? 
-     * bool isWinner; //default : false ***true: win the game, false: lose the game 
+     * bytes1 difficulty; // EZ, NM, HD - necessary?
+     * bool isWinner; //default : false ***true: win the game, false: lose the game
      * bool useItem; //default: false
      *}
      * @param difficulty 게임의 난이도를 front-end에서 받아온다.
@@ -98,7 +98,6 @@ contract GameController {
 
         require(_gameCost == BET_TOKEN_AMOUNT, "You Does not bet 10 Magnet Tokens"); // Is gameCost same as the BET_TOKEN_AMOUNT
         require(Magnet(tokensAddr[0]).balanceOf(msg.sender) >= BET_TOKEN_AMOUNT, "Not Enough Magnet Tokens"); // check Magnet balance of Users.
-        
         if(user = 0x0) { // No User Data (Newbie)
             register();
         }
@@ -108,7 +107,7 @@ contract GameController {
         user.isPlaying = true;
         user.totalGameCount += 1;
 
-        // write game log        
+        // write game log
         GameLog log = user.logs[totalGameCount];
         log.gameHex = _gameHex;
         log.result = GameResult.LOSE;
@@ -125,9 +124,9 @@ contract GameController {
     /**
      * @dev 게임 종료 시 실행되는 함수로써 게임 결과를 업데이트 한 후 LOSE 이벤트를 발생시킨다..
      * @param _gameHex 기존 게임 로그와의 비교를 통해 조작 여부를 확인한다.
-     * @param _isWinner 게임 승리 여부를 확인하기 위한 bool parameter 
+     * @param _isWinner 게임 승리 여부를 확인하기 위한 bool parameter
      */
-    function endGame(bytes32 _gameHex, bool _isWinner) { 
+    function endGame(bytes32 _gameHex, bool _isWinner) public {
         userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
@@ -136,7 +135,7 @@ contract GameController {
         
         GameLog log = user.logs[totalGameCount];
         // _gameHex recheck(compare with log's hex value)
-        require(log.gameHex == _gameHex);
+        require((log.gameHex == _gameHex), "Game Hex does not match");
 
         //update game result. and reward to users depending on the result of final game.
         if(_isWinner) { // ture : WIN, false : LOSE [get values from front-end game]
