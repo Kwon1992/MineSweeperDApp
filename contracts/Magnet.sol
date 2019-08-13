@@ -31,7 +31,7 @@ contract Magnet is ERC20{
 
     // modifier definition
     modifier onlyOwner() {
-        require(msg.sender == owner || msg.sender == controller);
+        require(msg.sender == owner || msg.sender == controller, "Unauthorized sender");
         _;
     }
 
@@ -69,36 +69,52 @@ contract Magnet is ERC20{
 
 
     // Non-standard functions by OpenZeppelin
-    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
-        super(spender, addedValue);
-    }
+    // function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+    //     super(spender, addedValue);
+    // }
 
  
-    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
-        super(spender, subtractedValue);
-    }
+    // function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+    //     super(spender, subtractedValue);
+    // }
 
     function exchangeTokens(uint256 amount, address user) public onlyOwner returns (bool) {
-        require(balances[user] >= amount && amount >= 10000);
+        require(balances[user] >= amount, "Not enough Balance");
+        require(amount >= 10000, "Not Reach Minimal Condition: 10000 MFT");
         balances[user] -= amount;
         return true;
     }
 
     function buyTokens() payable public returns (bool) {
         uint tokensToBuy = msg.value / tokenPrice;
-        require(balances[msg.sender] + tokensToBuy >= balances[msg.sender]); // watch for overflow
-        require(_suppliableAmount >= tokensToBuy); // check suppliable token amounts
+        require(balances[msg.sender] + tokensToBuy >= balances[msg.sender], "OverFlow Occured"); // watch for overflow
+        require(_suppliableAmount >= tokensToBuy, "Not enough Suppliable Tokens"); // check suppliable token amounts
         balances[msg.sender] += tokensToBuy;
         totalTokens -= tokensToBuy;
+        return true;
     }
 
     function payToGamePlay() public {
-        require(balances[user] >= GAME_COST);
+        require(balances[user] >= GAME_COST, "Not enough Balance");
         balances[user] -= GAME_COST;
         _suppliableAmount += GAME_COST;
     }
 
     function rewardTokens(bytes1 difficulty, address user) public onlyOwner returns (bool) {
-        // 비율 모름...
+        if(_difficulty == "EZ" && checkAmounts(7)) {
+            balances[msg.sender] += 7;
+        } else if (_difficulty == "NM" && checkAmounts(10)) {
+            balances[msg.sender] += 10;
+        } else if (_difficulty == "HD" && checkAmounts(20)) {
+            balances[msg.sender] += 20;
+        } else {
+            console.log("NOT AVAILABLE DIFFICULTY");
+        }
+    }
+
+    function checkAmounts(uint256 _amount) internal {
+        require(_suppliableAmount >= _amount, "Not enough Suppliable Tokens");
+        require(balance[msg.sender] + _amount >= balances[msg.sender], "Overflow Occured");
+        return true;
     }
 }

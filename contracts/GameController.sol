@@ -49,6 +49,9 @@ contract GameController {
 
     // when users start the game
     event START(bytes1 difficulty, bytes32 gameHex, bool useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)  
+    // event START_ERR_ITEM();
+    // event START_ERR_TOKEN();
+
     // when the game is over.
     event WIN();
     event LOSE();
@@ -106,10 +109,13 @@ contract GameController {
         user.totalGameCount += 1;
 
         // write game log        
-        GameLog log= user.logs[totalGameCount];
+        GameLog log = user.logs[totalGameCount];
         log.gameHex = _gameHex;
         log.result = GameResult.LOSE;
         log.useItem = _useItem;
+
+        // decrease MagnetField (if use items)
+
 
         // substract 10 Magnet Tokens
         Magnet(tokensAddr[0]).payToGamePlay();
@@ -122,26 +128,46 @@ contract GameController {
      * @param _isWinner 게임 승리 여부를 확인하기 위한 bool parameter 
      */
     function endGame(bytes32 _gameHex, bool _isWinner) { 
-        require(user != 0x0, "No User Data");
-
         userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
-        GameLog log= user.logs[totalGameCount];
+
+        // chech user is in contract's database.
+        require(user != 0x0, "No User Data");
+        
+        GameLog log = user.logs[totalGameCount];
         // _gameHex recheck(compare with log's hex value)
         require(log.gameHex == _gameHex);
 
         //update game result. and reward to users depending on the result of final game.
-        if(_isWinner) { // ture : WIN, false : LOSE
+        if(_isWinner) { // ture : WIN, false : LOSE [get values from front-end game]
             log.result = GameResult.WIN;
+            if(rewardWinner(log.difficulty)) emit WIN();
             //보상 Magnet 과 MagnetField...
-            emit WIN();
+            
         } else {
             //보상 MagnetField만...
             log.result = GameResult.LOSE;
-            emit LOSE();
+            if(rewardLoser(log.difficulty)) emit LOSE()
         }
-        
+    }
 
+    /**
+     * @dev 승리한 유저에게 게임 보상을 한다
+     * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
+     */
+    function rewardWinner(bytes1 _difficulty) internal returns (bool) {
+        require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender));
+        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender));
+        return true;
+    }
+    
+    /**
+     * @dev 패배한 유저에게 게임 보상을 한다
+     * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
+     */
+    function rewardLoser(bytes1 _difficulty) internal returns (bool) {
+        require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender));
+        return true;
     }
 
 

@@ -2,6 +2,7 @@ pragma solidity ^0.5.2;
 
 import 'node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
+// 1 Manget == 100 MagnetField
 contract Magnet is ERC20{
     // ERC20 functions are implemeted by parent contract(ERC20 by Openzeppelin)
 
@@ -25,7 +26,7 @@ contract Magnet is ERC20{
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner || msg.sender == controller);
+        require(msg.sender == owner || msg.sender == controller, "Unauthorized sender");
         _;
     }
 
@@ -63,22 +64,37 @@ contract Magnet is ERC20{
 
 
     // Non-standard functions by OpenZeppelin
-    function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
-        super(spender, addedValue);
-    }
+    // function increaseAllowance(address spender, uint256 addedValue) public returns (bool) {
+    //     super(spender, addedValue);
+    // }
 
  
-    function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
-        super(spender, subtractedValue);
-    }
+    // function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
+    //     super(spender, subtractedValue);
+    // }
 
     function exchangeTokens(uint256 amount, address user) public onlyOwner returns (bool) {
-        require(balances[user] >= amount && amount >= 10000);
+        require(balances[user] >= amount, "Not enough Balance");
+        require(amount >= 10000, "Not Reach Minimal Condition: 10000 MFT");
         balances[user] -= amount;
         return true;
     }
 
     function rewardTokens(bytes1 difficulty, address user) public onlyOwner returns (bool) {
-        // 비율 모름...
+        if(_difficulty == "EZ" && checkAmounts(700)) {
+            balances[msg.sender] += 700;
+        } else if (_difficulty == "NM" && checkAmounts(1000)) {
+            balances[msg.sender] += 1000;
+        } else if (_difficulty == "HD" && checkAmounts(2000)) {
+            balances[msg.sender] += 2000;
+        } else {
+            console.log("NOT AVAILABLE DIFFICULTY");
+        }
+    }
+
+    function checkAmounts(uint256 _amount) internal {
+        require(_suppliableAmount >= _amount, "Not enough Suppliable Tokens");
+        require(balance[msg.sender] + _amount >= balances[msg.sender], "Overflow Occured");
+        return true;
     }
 }
