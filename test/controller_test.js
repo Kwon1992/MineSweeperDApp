@@ -51,8 +51,8 @@ contract('GameController', function([deployer, user1, user2]) {
             await controller.buyMagnet({from:user1, value:10000000000000000, gas:300000});
             let magnet = await controller.getMagnetBalance({from:user1});
             console.log(magnet);
-        })
-
+        });
+    
         it('MangetField Tokens Balance', async () => {
             let magnetF = await controller.getMagnetFieldBalance({from:user1});
             console.log(magnetF);
@@ -217,7 +217,7 @@ contract('GameController', function([deployer, user1, user2]) {
     // 게임결과에 따른 보상주기
     // == SOLVED!! ==
     describe('Reward Users', () => {
-        it('WIN', async () => {
+        it.only('WIN', async () => {
             let magnetBalance;
             let magnetFieldBalance;
 

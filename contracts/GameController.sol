@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import './Magnet.sol';
 import './MagnetField.sol';
 
-    // 맨 처음 게임을 시작하는 사람들 (즉, 정보가 입력되어있지 않은 사람들..에 대한 처리가 필요)
+// ganache-cli -l 8000000
 contract GameController {
 
     // variables
@@ -24,7 +24,7 @@ contract GameController {
         address gamerID; // User account address
         uint256 totalGameCount;  // to tracking recent gameResult.
         bool isPlaying; // check progress of the game
-        bool isExistUser;
+        // bool isExistUser;
         mapping (uint256 => GameLog) logs; // start from 0 to N.... (game result log)
     }
 
@@ -41,17 +41,12 @@ contract GameController {
     uint8 constant internal BET_TOKEN_AMOUNT = 10;
     uint256 constant internal LEAST_EXCHANGE_AMOUNT = 10000;
 
-
-
-
-
     enum ItemLists { Shield, FirstCell, ShowMap } // check item uselist...
     enum GameResult { WIN, LOSE, NOT_FOUND } // 0: WIN, 1: LOSE
 
     // Event Lists
 
     // when users start the game
-
     event START(bytes2 difficulty, bytes32 gameHex, bool[3] useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)
 
     // event START_ERR_ITEM();
@@ -64,7 +59,7 @@ contract GameController {
 
 
     function buyMagnet() public payable returns (bool) {
-        uint256 amount = msg.value / (Magnet(tokensAddr[0]).getTokenPrice());
+        uint256 amount = msg.value / Magnet(tokensAddr[0]).getTokenPrice();
         Magnet(tokensAddr[0]).buyTokens(amount, msg.sender);
     }
 
@@ -90,7 +85,7 @@ contract GameController {
         user.gamerID = msg.sender;
         user.totalGameCount = 0;
         user.isPlaying = false;
-        user.isExistUser = true;
+        // user.isExistUser = true;
 
         emit REGISTER();
     }
@@ -138,14 +133,12 @@ contract GameController {
 
         require(_gameCost == BET_TOKEN_AMOUNT, "You Does not bet 10 Magnet Tokens"); // Is gameCost same as the BET_TOKEN_AMOUNT
         require(Magnet(tokensAddr[0]).balanceOf(msg.sender) >= BET_TOKEN_AMOUNT, "Not Enough Magnet Tokens"); // check Magnet balance of Users.
-        if(!(user.isExistUser)) { // No User Data (Newbie)
+        if(user.gamerID == address(0)) { // No User Data (Newbie)
             register(userIdentificator);
         }
 
-        
-
         //double check user existence
-        require(user.isExistUser, "No User Data : startGame");
+        require(user.gamerID != address(0), "No User Data : startGame");
         // change isPlaying flag and update totalGameCount
         user.isPlaying = true;
         user.totalGameCount += 1;
@@ -156,7 +149,7 @@ contract GameController {
         log.gameHex = _gameHex;
         log.result = GameResult.LOSE;
 
-        for (uint i=0 ; i<3; i++) {
+        for (uint i = 0 ; i < 3; i++) {
             log.useItem[i] = _useItem[i];
         }
 
@@ -174,15 +167,14 @@ contract GameController {
      * @param _gameHex 기존 게임 로그와의 비교를 통해 조작 여부를 확인한다.
      * @param _isWinner 게임 승리 여부를 확인하기 위한 bool parameter
      */
-
-    function endGame(bytes32 _gameHex, bool _isWinner) public { 
+    function endGame(bytes32 _gameHex, bool _isWinner) public {
         bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
         // check user is in contract's database.
-        require(user.isExistUser, "No User Data: endGame");
+        require(user.gamerID != address(0), "No User Data: endGame");
 
-        GameLog storage log = user.logs[user.totalGameCount]; 
+        GameLog storage log = user.logs[user.totalGameCount];
         // _gameHex recheck(compare with log's hex value :: RECENT GAME!!)
 
         require(log.gameHex == _gameHex, "No such Game in logs: endGame");
@@ -245,7 +237,8 @@ contract GameController {
      * @return 최근 게임의 난이도와를 반환한다.
      */
     function getGameResults(uint256 index) public view returns (bytes2 difficulty, GameResult result) {
-        if (users[keccak256(abi.encodePacked(msg.sender))].gamerID == address(0) || users[keccak256(abi.encodePacked(msg.sender))].totalGameCount < index) {
+        if (users[keccak256(abi.encodePacked(msg.sender))].gamerID == address(0) ||
+            users[keccak256(abi.encodePacked(msg.sender))].totalGameCount < index) {
             difficulty = bytes2("NA");
             result = GameResult.NOT_FOUND;
         } else {
