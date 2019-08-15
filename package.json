@@ -1,5 +1,5 @@
 {
-  "name": "MineSweeperDApp",
+  "name": "MineSweeperDApp_Web3Updating",
   "version": "1.0.0",
   "description": "",
   "main": "truffle-config.js",
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "openzeppelin-solidity": "2.3.0"
+    "openzeppelin-solidity": "2.3.0",
+    "web3": "^1.2.1"
   }
 }

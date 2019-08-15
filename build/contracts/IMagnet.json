@@ -85,14 +85,15 @@
       "type": "function"
     }
   ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_difficulty\",\"type\":\"bytes2\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"rewardTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"payToGamePlay\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"tokensToBuy\",\"type\":\"uint256\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"buyTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"exchangeTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeperDApp_Web3Updating/contracts/IMagnet.sol\":\"IMagnet\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeperDApp_Web3Updating/contracts/IMagnet.sol\":{\"keccak256\":\"0x3e27211014eefbb5304f8a0db50436a32267e27cf942b2369ac45befef202857\",\"urls\":[\"bzzr://1c47533f22cd51129e7e2b218975f4713cf8ba8924b050a5a6fd64057c765a30\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.0;\r\n\r\ninterface IMagnet {\r\n    function exchangeTokens(uint256 amount, address user) external returns (bool);\r\n    function buyTokens(uint256 tokensToBuy, address user) external returns (bool);\r\n    function payToGamePlay(address user) external;\r\n    function rewardTokens(bytes2 _difficulty, address user) external returns (bool);\r\n}",
-  "sourcePath": "C:\\Users\\khw64\\OneDrive\\문서\\GitHub\\MineSweeperDApp\\contracts\\IMagnet.sol",
+  "sourcePath": "C:\\Users\\kwonHyunwoo\\Documents\\GitHub\\MineSweeperDApp_Web3Updating\\contracts\\IMagnet.sol",
   "ast": {
-    "absolutePath": "/C/Users/khw64/OneDrive/문서/GitHub/MineSweeperDApp/contracts/IMagnet.sol",
+    "absolutePath": "/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeperDApp_Web3Updating/contracts/IMagnet.sol",
     "exportedSymbols": {
       "IMagnet": [
         801
@@ -512,7 +513,7 @@
     "src": "0:355:2"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/khw64/OneDrive/문서/GitHub/MineSweeperDApp/contracts/IMagnet.sol",
+    "absolutePath": "/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeperDApp_Web3Updating/contracts/IMagnet.sol",
     "exportedSymbols": {
       "IMagnet": [
         801
@@ -933,11 +934,11 @@
   },
   "compiler": {
     "name": "solc",
-    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+    "version": "0.5.8+commit.23d335f2.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.3",
-  "updatedAt": "2019-08-15T07:10:27.914Z",
+  "schemaVersion": "3.0.11",
+  "updatedAt": "2019-08-15T17:49:58.746Z",
   "devdoc": {
     "methods": {}
   },

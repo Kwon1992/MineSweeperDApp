@@ -233,7 +233,7 @@ contract GameController {
      *      for loop는 front-end에서 돌면서 확인할 수 있도록 한다.
      *      getTotalGameCount()를 이용해 front-end에서 최근 게임번호를 저장한뒤 이를 활용해 for loop를 돈다면
      *      확인이 가능하다.
-     * @param index  알고싶은 게임번호
+     * @param  index  알고싶은 게임번호
      * @return 최근 게임의 난이도와를 반환한다.
      */
     function getGameResults(uint256 index) public view returns (bytes2 difficulty, GameResult result) {
