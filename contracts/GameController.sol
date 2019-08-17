@@ -63,6 +63,43 @@ contract GameController {
         Magnet(tokensAddr[0]).buyTokens(amount, msg.sender);
     }
 
+
+    /*
+    function getETH() public view returns (uint256) {
+        return address(this).balance;
+    }
+    
+    //to send ETH to deployer.
+    function sendETH() payable public returns (bool result) {
+        require(msg.sender == minter);
+        require(getETH() > 0);
+        msg.sender.transfer(address(this).balance);
+        return true;
+    }
+    */
+    // 1Magnet = 0.001ETH 1000
+    function sellMagnet(uint sellAmount) public payable returns (bool) {
+        bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
+        address seller = users[userIdentificator].gamerID;
+        uint256 getETH = (sellAmount * 1000000000000000);
+
+        if(Magnet(tokensAddr[0]).sellTokens(sellAmount, msg.sender)) { // true
+        // ETH 주기 
+            require(address(this).balance > getETH, "Not enough ETH in contracts... Plz contact to Deployer");
+            require(seller != address(0x0) && seller == msg.sender, "Seller - Buyer Not Match");
+            msg.sender.transfer(getETH);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    function buyMagnetField() public payable returns (bool) {
+        
+        MagnetField(tokensAddr[1]).getTokens(100000, msg.sender);
+    }
+
     function getMagnetBalance() public view returns (uint256) {
         return Magnet(tokensAddr[0]).balanceOf(msg.sender);
     }
@@ -97,9 +134,9 @@ contract GameController {
      */
     function useItems(bool[3] memory _useItems) public returns (uint256){ // internal로 바꿀 예정
         uint256 totalItemCost = 0;
-        if(_useItems[0]) totalItemCost += 7000;
-        if(_useItems[1]) totalItemCost += 10000;
-        if(_useItems[2]) totalItemCost += 20000;
+        if(_useItems[0]) totalItemCost += 10000;
+        if(_useItems[1]) totalItemCost += 20000;
+        if(_useItems[2]) totalItemCost += 30000;
         if(totalItemCost != 0) {
             MagnetField(tokensAddr[1]).buyItems(totalItemCost, msg.sender);
         }

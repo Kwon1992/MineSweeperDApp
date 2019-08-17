@@ -15,7 +15,6 @@
 
 
 /*----- constants -----*/
-import { sendTxnForBettingAndUsingItem } from "./Dapp.js";
 
 console.log(sessionStorage);
 
@@ -29,11 +28,9 @@ var sizeLookup = {
   'EZ': {size:13, totalBombs:40, tableWidth: "338px"}, // 45.15%
   'NM': {size:20, totalBombs:70, tableWidth: "520px"}, // 18.70%
   'HD': {size:25, totalBombs:100, tableWidth: "650px"}, // 2.35%
-  'SHD': {size:30, totalBombs:140, tableWidth: "780px"}, // 0.0086% - 구현 예정
 
   //row는 15로 고정!
 
-  'LUCK': {size:40, totalBombs:1599}, // PUSH YOUR LUCK! 0.0006% - 따로 구현 예정!
 };
 var colors = [ // 각각 폭탄 개수마다 숫자의 색을 바꾸기 위한 리스트
   '',

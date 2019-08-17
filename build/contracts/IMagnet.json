@@ -85,25 +85,25 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_difficulty\",\"type\":\"bytes2\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"rewardTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"payToGamePlay\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"tokensToBuy\",\"type\":\"uint256\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"buyTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"exchangeTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeperDApp_Web3Updating/contracts/IMagnet.sol\":\"IMagnet\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeperDApp_Web3Updating/contracts/IMagnet.sol\":{\"keccak256\":\"0x3e27211014eefbb5304f8a0db50436a32267e27cf942b2369ac45befef202857\",\"urls\":[\"bzzr://1c47533f22cd51129e7e2b218975f4713cf8ba8924b050a5a6fd64057c765a30\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_difficulty\",\"type\":\"bytes2\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"rewardTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"payToGamePlay\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"tokensToBuy\",\"type\":\"uint256\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"buyTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"exchangeTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeper_Web3Updating/contracts/IMagnet.sol\":\"IMagnet\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeper_Web3Updating/contracts/IMagnet.sol\":{\"keccak256\":\"0x3e27211014eefbb5304f8a0db50436a32267e27cf942b2369ac45befef202857\",\"urls\":[\"bzzr://1c47533f22cd51129e7e2b218975f4713cf8ba8924b050a5a6fd64057c765a30\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.0;\r\n\r\ninterface IMagnet {\r\n    function exchangeTokens(uint256 amount, address user) external returns (bool);\r\n    function buyTokens(uint256 tokensToBuy, address user) external returns (bool);\r\n    function payToGamePlay(address user) external;\r\n    function rewardTokens(bytes2 _difficulty, address user) external returns (bool);\r\n}",
-  "sourcePath": "C:\\Users\\kwonHyunwoo\\Documents\\GitHub\\MineSweeperDApp_Web3Updating\\contracts\\IMagnet.sol",
+  "sourcePath": "C:\\Users\\kwonHyunwoo\\Documents\\GitHub\\MineSweeper_Web3Updating\\contracts\\IMagnet.sol",
   "ast": {
-    "absolutePath": "/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeperDApp_Web3Updating/contracts/IMagnet.sol",
+    "absolutePath": "/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeper_Web3Updating/contracts/IMagnet.sol",
     "exportedSymbols": {
       "IMagnet": [
-        801
+        901
       ]
     },
-    "id": 802,
+    "id": 902,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 768,
+        "id": 868,
         "literals": [
           "solidity",
           "^",
@@ -119,9 +119,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 801,
+        "id": 901,
         "linearizedBaseContracts": [
-          801
+          901
         ],
         "name": "IMagnet",
         "nodeType": "ContractDefinition",
@@ -129,22 +129,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 777,
+            "id": 877,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "exchangeTokens",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 773,
+              "id": 873,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 770,
+                  "id": 870,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 777,
+                  "scope": 877,
                   "src": "76:14:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -153,7 +153,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 769,
+                    "id": 869,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "76:7:2",
@@ -167,10 +167,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 772,
+                  "id": 872,
                   "name": "user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 777,
+                  "scope": 877,
                   "src": "92:12:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -179,7 +179,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 771,
+                    "id": 871,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "92:7:2",
@@ -196,15 +196,15 @@
               "src": "75:30:2"
             },
             "returnParameters": {
-              "id": 776,
+              "id": 876,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 775,
+                  "id": 875,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 777,
+                  "scope": 877,
                   "src": "124:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -213,7 +213,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 774,
+                    "id": 874,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "124:4:2",
@@ -228,7 +228,7 @@
               ],
               "src": "123:6:2"
             },
-            "scope": 801,
+            "scope": 901,
             "src": "52:78:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -237,22 +237,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 786,
+            "id": 886,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "buyTokens",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 782,
+              "id": 882,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 779,
+                  "id": 879,
                   "name": "tokensToBuy",
                   "nodeType": "VariableDeclaration",
-                  "scope": 786,
+                  "scope": 886,
                   "src": "155:19:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -261,7 +261,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 778,
+                    "id": 878,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "155:7:2",
@@ -275,10 +275,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 781,
+                  "id": 881,
                   "name": "user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 786,
+                  "scope": 886,
                   "src": "176:12:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -287,7 +287,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 780,
+                    "id": 880,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "176:7:2",
@@ -304,15 +304,15 @@
               "src": "154:35:2"
             },
             "returnParameters": {
-              "id": 785,
+              "id": 885,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 784,
+                  "id": 884,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 786,
+                  "scope": 886,
                   "src": "208:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -321,7 +321,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 783,
+                    "id": 883,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "208:4:2",
@@ -336,7 +336,7 @@
               ],
               "src": "207:6:2"
             },
-            "scope": 801,
+            "scope": 901,
             "src": "136:78:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -345,22 +345,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 791,
+            "id": 891,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "payToGamePlay",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 789,
+              "id": 889,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 788,
+                  "id": 888,
                   "name": "user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 791,
+                  "scope": 891,
                   "src": "243:12:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -369,7 +369,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 787,
+                    "id": 887,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "243:7:2",
@@ -386,12 +386,12 @@
               "src": "242:14:2"
             },
             "returnParameters": {
-              "id": 790,
+              "id": 890,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "265:0:2"
             },
-            "scope": 801,
+            "scope": 901,
             "src": "220:46:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -400,22 +400,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 800,
+            "id": 900,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "rewardTokens",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 796,
+              "id": 896,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 793,
+                  "id": 893,
                   "name": "_difficulty",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 900,
                   "src": "294:18:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -424,7 +424,7 @@
                     "typeString": "bytes2"
                   },
                   "typeName": {
-                    "id": 792,
+                    "id": 892,
                     "name": "bytes2",
                     "nodeType": "ElementaryTypeName",
                     "src": "294:6:2",
@@ -438,10 +438,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 795,
+                  "id": 895,
                   "name": "user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 900,
                   "src": "314:12:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -450,7 +450,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 794,
+                    "id": 894,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "314:7:2",
@@ -467,15 +467,15 @@
               "src": "293:34:2"
             },
             "returnParameters": {
-              "id": 799,
+              "id": 899,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 798,
+                  "id": 898,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 900,
                   "src": "346:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -484,7 +484,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 797,
+                    "id": 897,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "346:4:2",
@@ -499,31 +499,31 @@
               ],
               "src": "345:6:2"
             },
-            "scope": 801,
+            "scope": 901,
             "src": "272:80:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 802,
+        "scope": 902,
         "src": "27:328:2"
       }
     ],
     "src": "0:355:2"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeperDApp_Web3Updating/contracts/IMagnet.sol",
+    "absolutePath": "/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeper_Web3Updating/contracts/IMagnet.sol",
     "exportedSymbols": {
       "IMagnet": [
-        801
+        901
       ]
     },
-    "id": 802,
+    "id": 902,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 768,
+        "id": 868,
         "literals": [
           "solidity",
           "^",
@@ -539,9 +539,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 801,
+        "id": 901,
         "linearizedBaseContracts": [
-          801
+          901
         ],
         "name": "IMagnet",
         "nodeType": "ContractDefinition",
@@ -549,22 +549,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 777,
+            "id": 877,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "exchangeTokens",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 773,
+              "id": 873,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 770,
+                  "id": 870,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 777,
+                  "scope": 877,
                   "src": "76:14:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -573,7 +573,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 769,
+                    "id": 869,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "76:7:2",
@@ -587,10 +587,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 772,
+                  "id": 872,
                   "name": "user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 777,
+                  "scope": 877,
                   "src": "92:12:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -599,7 +599,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 771,
+                    "id": 871,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "92:7:2",
@@ -616,15 +616,15 @@
               "src": "75:30:2"
             },
             "returnParameters": {
-              "id": 776,
+              "id": 876,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 775,
+                  "id": 875,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 777,
+                  "scope": 877,
                   "src": "124:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -633,7 +633,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 774,
+                    "id": 874,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "124:4:2",
@@ -648,7 +648,7 @@
               ],
               "src": "123:6:2"
             },
-            "scope": 801,
+            "scope": 901,
             "src": "52:78:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -657,22 +657,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 786,
+            "id": 886,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "buyTokens",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 782,
+              "id": 882,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 779,
+                  "id": 879,
                   "name": "tokensToBuy",
                   "nodeType": "VariableDeclaration",
-                  "scope": 786,
+                  "scope": 886,
                   "src": "155:19:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -681,7 +681,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 778,
+                    "id": 878,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "155:7:2",
@@ -695,10 +695,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 781,
+                  "id": 881,
                   "name": "user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 786,
+                  "scope": 886,
                   "src": "176:12:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -707,7 +707,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 780,
+                    "id": 880,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "176:7:2",
@@ -724,15 +724,15 @@
               "src": "154:35:2"
             },
             "returnParameters": {
-              "id": 785,
+              "id": 885,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 784,
+                  "id": 884,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 786,
+                  "scope": 886,
                   "src": "208:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -741,7 +741,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 783,
+                    "id": 883,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "208:4:2",
@@ -756,7 +756,7 @@
               ],
               "src": "207:6:2"
             },
-            "scope": 801,
+            "scope": 901,
             "src": "136:78:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -765,22 +765,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 791,
+            "id": 891,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "payToGamePlay",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 789,
+              "id": 889,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 788,
+                  "id": 888,
                   "name": "user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 791,
+                  "scope": 891,
                   "src": "243:12:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -789,7 +789,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 787,
+                    "id": 887,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "243:7:2",
@@ -806,12 +806,12 @@
               "src": "242:14:2"
             },
             "returnParameters": {
-              "id": 790,
+              "id": 890,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "265:0:2"
             },
-            "scope": 801,
+            "scope": 901,
             "src": "220:46:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -820,22 +820,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 800,
+            "id": 900,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "rewardTokens",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 796,
+              "id": 896,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 793,
+                  "id": 893,
                   "name": "_difficulty",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 900,
                   "src": "294:18:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -844,7 +844,7 @@
                     "typeString": "bytes2"
                   },
                   "typeName": {
-                    "id": 792,
+                    "id": 892,
                     "name": "bytes2",
                     "nodeType": "ElementaryTypeName",
                     "src": "294:6:2",
@@ -858,10 +858,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 795,
+                  "id": 895,
                   "name": "user",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 900,
                   "src": "314:12:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -870,7 +870,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 794,
+                    "id": 894,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "314:7:2",
@@ -887,15 +887,15 @@
               "src": "293:34:2"
             },
             "returnParameters": {
-              "id": 799,
+              "id": 899,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 798,
+                  "id": 898,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 800,
+                  "scope": 900,
                   "src": "346:4:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -904,7 +904,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 797,
+                    "id": 897,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "346:4:2",
@@ -919,14 +919,14 @@
               ],
               "src": "345:6:2"
             },
-            "scope": 801,
+            "scope": 901,
             "src": "272:80:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 802,
+        "scope": 902,
         "src": "27:328:2"
       }
     ],
@@ -938,7 +938,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-08-15T17:49:58.746Z",
+  "updatedAt": "2019-08-17T09:13:35.974Z",
   "devdoc": {
     "methods": {}
   },

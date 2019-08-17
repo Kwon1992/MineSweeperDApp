@@ -23,7 +23,7 @@
 
 <body class="flex-body" style="text-align: center;">   
     
-    <div>
+    <div>\
         <h1>MineSweeper</h1>
         <div id="size-btns" style="width: auto;">
             <div id="size-btns"><button class='level' id="EZ"> Easy</button></div> 
@@ -34,7 +34,7 @@
     <br>
     <div>
         <h2>Select Items </h2>
-            (Protect : 2500BMT / Start : 4000 BMT / REVEAL : 10000 BMT)<br>
+            (Protect : 10000 / Start : 20000  / REVEAL : 30000 (Unit: MagnetField)<br>
         <div id="item-btns">
             <div id="item-btns"><button class="item" id="protect">PROECT BOMB</button></div>
             <div id="item-btns"><button class="item" id="showStart">START MARKER</button></div> 
@@ -50,8 +50,14 @@
         <button id="explain-btn" type="button" >HOW TO PLAY</button>
     </div>
     <br><br><br>
+    <div>        
+        <button id="history-btn" type="button">GAME HISTORY</button>
+    </div>
 
-    <b>Buy Magnet: </b><input type='text' id="buyingTokens" placeholder="write integer only."><button id="purchase-btn" type="button" >BUY</button>
+    <b>FOR TEST____ BUY MAGNETFIELD</b><button id="magnetField-btn" type="button" >MAGNETFIELD</button><br /><br /><br />
+    <b>ETH to Magnet: </b><input type='text' id="buyingTokens" style="width:200px" placeholder="Write the amount of magnet">  <button id="purchase-btn" type="button" >BUY</button><br />
+    <b>Change MagnetField to Magnet(Minimum 50000 MagnetField): </b><input type='text' id="exchangeTokens"style="width:200px" placeholder="Write the amount of MangetField">  <button id="exchange-btn" type="button" >EXCHANGE</button><br />
+    <b>Magnet to ETH: </b><input type='text' id="sellingTokens" style="width:200px" placeholder="Write the amount of magnet">  <button id="sell-btn" type="button" >SELL</button><br />
 
 </body>
 </html>

@@ -35,7 +35,7 @@ contract Magnet is IERC20, IMagnet{
         decimals = 8;
         totalSupply = INITIAL_SUPPLY * 10 ** uint(decimals);
         suppliableAmount = INITIAL_SUPPLY * 10 ** uint(decimals);
-        tokenPrice = 100000000000000; // 0.0001ETH = 1 MAGNET
+        tokenPrice = 1000000000000000; // 0.001ETH = 1 MAGNET
     }
 
     // modifier definition
@@ -268,9 +268,10 @@ contract Magnet is IERC20, IMagnet{
      * @return 정상적으로 함수 동작 시 true 반환
      */
     function exchangeTokens(uint256 amount, address user) public onlyOwner returns (bool) {
-        require(balances[user] >= amount, "Not enough Balance");
-        require(amount >= 10000, "Not Reach Minimal Condition: 10000 MFT");
-        balances[user] -= amount;
+        uint256 changedMagnet = amount/100;
+        require(suppliableAmount >= changedMagnet, "Not enough suppliable amount");
+        require(changedMagnet >= 500, "Not Reach Minimal Condition: 10000 MFT");
+        balances[user] += changedMagnet;
         return true;
     }
 
@@ -284,17 +285,24 @@ contract Magnet is IERC20, IMagnet{
      * @return 정상적으로 함수 동작 시 true 반환
      */
     function buyTokens(uint tokensToBuy, address user) public onlyOwner returns (bool) {
-        require(balances[user] + tokensToBuy >= balances[msg.sender], "OverFlow Occured"); // watch for overflow
+        require(balances[user] + tokensToBuy >= balances[user], "OverFlow Occured"); // watch for overflow
         require(suppliableAmount >= tokensToBuy, "Not enough Suppliable Tokens"); // check suppliable token amounts
         balances[user] += tokensToBuy;
         suppliableAmount -= tokensToBuy;
         return true;
     }
 
+    function sellTokens(uint tokensToSell, address user) public onlyOwner returns (bool) {
+        require(balances[user] - tokensToSell <= balances[user], "UnderFlow Occured");
+        balances[user] -= tokensToSell;
+        suppliableAmount += tokensToSell;
+        return true;
+    }
+
     /**
      * @dev 게임 시작 전 시작 비용을 내기 위한 함수
      */
-    function payToGamePlay(address user) public {
+    function payToGamePlay(address user)  public onlyOwner {
         require(balances[user] >= GAME_COST, "Not enough Balance");
         balances[user] -= GAME_COST;
         suppliableAmount += GAME_COST;
