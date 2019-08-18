@@ -259,10 +259,10 @@ contract GameController {
      * @dev 특정 유저의 총 게임 횟수를 반환한다.
      * @return 특정 유저의 총 게임 횟수.
      */
-    // function getTotalGameCount() public view returns (uint256) {
-    //     UserInfo memory user = users[keccak256(abi.encodePacked(msg.sender))];
-    //     return user.totalGameCount;
-    // }
+    function getTotalGameCount() public view returns (uint256) {
+        UserInfo memory user = users[keccak256(abi.encodePacked(msg.sender))];
+        return user.totalGameCount;
+    }
 
     /**
      * @dev 유저의 특정(index) 게임 결과를 보여준다.

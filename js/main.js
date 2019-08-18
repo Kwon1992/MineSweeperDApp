@@ -354,8 +354,8 @@ function veil() { // 모든 셀 열기 (아이템 사용 시)
 
 function buildTable() { // core Function #1
 
-  // <tr> : (가로_행 추가) <td> : (세로_열 추가) <tr> <td></td> <td></td> </tr> : 1행 2열짜리 테이블
-  //<div id="folder1"><a href="https://github.com/nickarocho/minesweeper/blob/master/readme.md" target="blank">Read Me </a></div>
+  // <tr> : (가로_행 추가) <td> : (세로_열 추가) <tr>i <td></td> <td></td> </tr> : 1행 2열짜리 테이블
+  //<div id="folder1"><a href="https://github.com/nckarocho/minesweeper/blob/master/readme.md" target="blank">Read Me </a></div>
   var topRow = `
   <tr>
     <td class="menu" id="window-title-bar" colspan="${colSize}">
