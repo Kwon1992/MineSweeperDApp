@@ -273,7 +273,7 @@ contract GameController {
      * @param  index  알고싶은 게임번호
      * @return 최근 게임의 난이도와를 반환한다.
      */
-    function getGameResults(uint256 index) public view returns (bytes2 difficulty, GameResult result) {
+    function getGameResults(uint256 index) public view returns (bytes2 difficulty, bytes32 gameHex, GameResult result) {
         if (users[keccak256(abi.encodePacked(msg.sender))].gamerID == address(0) ||
             users[keccak256(abi.encodePacked(msg.sender))].totalGameCount < index) {
             difficulty = bytes2("NA");
@@ -283,6 +283,7 @@ contract GameController {
             GameLog storage log = user.logs[index];
 
             difficulty = log.difficulty;
+            gameHex = log.gameHex;
             result = log.result;
         }
     }

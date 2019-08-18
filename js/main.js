@@ -506,7 +506,7 @@ function useItem() {
       var col = Math.floor(Math.random() * colSize);
       startCell = board[row][col];
 
-      if (!startCell.isBomb){
+      if (!startCell.isBomb && startCell.col >= 3){
         var td = document.querySelector(`[data-row="${startCell.row}"][data-col="${startCell.col}"]`);
         td.style.backgroundColor = "skyblue"
         break;
@@ -531,7 +531,6 @@ function getWinner() {
   for (var row = 0; row<board.length; row++) {
     for (var col = 0; col<board[0].length; col++) {
       var cell = board[row][col];
-      // console.log("cell row: "+ cell.row + ", cell col: "+cell.col+", revealed: "+cell.revealed + ", isbomb: "+cell.isBomb);
       if (!cell.revealed && !cell.isBomb) return false;
     }
   } 
@@ -596,6 +595,7 @@ function render() {
     console.log(winner);
     console.log(hitBomb);
     console.log((winner && !hitBomb));
+    alert("Accept the Transaction if you want to get rewards!");
     gameController.endGame(sessionStorage.getItem("gameID"), (winner && !hitBomb) , function(err,res) {
       if(err) {
         console.log(err);
