@@ -66,15 +66,14 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"cost\",\"type\":\"uint256\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"buyItems\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_difficulty\",\"type\":\"bytes2\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"rewardTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"amount\",\"type\":\"uint256\"},{\"name\":\"user\",\"type\":\"address\"}],\"name\":\"exchangeTokens\",\"outputs\":[{\"name\":\"\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeper_Web3Updating/contracts/IMagnetField.sol\":\"IMagnetField\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeper_Web3Updating/contracts/IMagnetField.sol\":{\"keccak256\":\"0x71b99fce6b550c2d0ae66ed20160dbc0a744b0106034e56df15624f3487c9afd\",\"urls\":[\"bzzr://192e1ffc50f45579a7361f95b15d65101c923d237d4a89700376f291e536047b\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "pragma solidity ^0.5.0;\r\n\r\ninterface IMagnetField {\r\n    function exchangeTokens(uint256 amount, address user) external returns (bool);\r\n    function buyItems(uint256 cost, address user) external;\r\n    function rewardTokens(bytes2 _difficulty, address user) external returns (bool);\r\n}",
-  "sourcePath": "C:\\Users\\kwonHyunwoo\\Documents\\GitHub\\MineSweeper_Web3Updating\\contracts\\IMagnetField.sol",
+  "sourcePath": "C:\\Users\\khw64\\OneDrive\\문서\\GitHub\\MineSweeperDApp_Web3\\contracts\\IMagnetField.sol",
   "ast": {
-    "absolutePath": "/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeper_Web3Updating/contracts/IMagnetField.sol",
+    "absolutePath": "/C/Users/khw64/OneDrive/문서/GitHub/MineSweeperDApp_Web3/contracts/IMagnetField.sol",
     "exportedSymbols": {
       "IMagnetField": [
         955
@@ -412,7 +411,7 @@
     "src": "0:285:3"
   },
   "legacyAST": {
-    "absolutePath": "/C/Users/kwonHyunwoo/Documents/GitHub/MineSweeper_Web3Updating/contracts/IMagnetField.sol",
+    "absolutePath": "/C/Users/khw64/OneDrive/문서/GitHub/MineSweeperDApp_Web3/contracts/IMagnetField.sol",
     "exportedSymbols": {
       "IMagnetField": [
         955
@@ -751,11 +750,11 @@
   },
   "compiler": {
     "name": "solc",
-    "version": "0.5.8+commit.23d335f2.Emscripten.clang"
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "3.0.11",
-  "updatedAt": "2019-08-18T11:19:32.721Z",
+  "schemaVersion": "3.0.3",
+  "updatedAt": "2019-08-20T05:52:43.936Z",
   "devdoc": {
     "methods": {}
   },
