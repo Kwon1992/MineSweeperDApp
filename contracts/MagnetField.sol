@@ -281,17 +281,22 @@ contract MagnetField is IERC20, IMagnetField{
 
     /**
      * @dev 게임 결과에 따른 보상을 해주기 위한 함수
-     * @param _difficulty user가 수행한 게임의 난이도
+     * @param difficulty user가 수행한 게임의 난이도
      * @param user 보상을 주어야하는 user
+     * @param isWinner 게임 성공 여부
      */
-    function rewardTokens(bytes2 _difficulty, address user) public onlyOwner returns (bool) {
-        if(_difficulty == bytes2("EZ") && checkAmounts(700, user)) {
+    function rewardTokens(bytes2 difficulty, address user, bool isWinner) public onlyOwner returns (bool) {
+        if(isWinner && checkAmounts(700, user)) {
             balances[user] += 700;
             suppliableAmount -= 700;
-        } else if (_difficulty == bytes2("NM") && checkAmounts(1000, user)) {
+        }
+        else if(difficulty == bytes2("EZ") && checkAmounts(700, user)) {
+            balances[user] += 700;
+            suppliableAmount -= 700;
+        } else if (difficulty == bytes2("NM") && checkAmounts(1000, user)) {
             balances[user] += 1000;
             suppliableAmount -= 1000;
-        } else if (_difficulty == bytes2("HD") && checkAmounts(2000, user)) {
+        } else if (difficulty == bytes2("HD") && checkAmounts(2000, user)) {
             balances[user] += 2000;
             suppliableAmount -= 2000;
         }

@@ -236,10 +236,10 @@ contract GameController {
     function rewardUser(bytes2 _difficulty, bool _isWinner) internal returns (bool) {
         if(_isWinner) {
             require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "Revert from Magnet : rewardUser");
-            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardUser");
+            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender, _isWinner), "Revert from MagnetF : rewardUser");
             emit WIN();
         } else {
-            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardUser");
+            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender, _isWinner), "Revert from MagnetF : rewardUser");
             emit LOSE();
         }
         return true;
