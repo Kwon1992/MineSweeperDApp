@@ -259,11 +259,7 @@ document.getElementById('start-btn').addEventListener('click', function() {
 
     gameController.getTotalGameCount({from:accountAddr}, function(err, res) {
       var gameSHA = web3.sha3(mapSize + accountAddr.toString() + (res.toNumber()+1));
-      var seedNumber = Math.floor(Math.random() * 10000000000);
-      console.log("BEFORE GAME START __ GAME ID : " + gameSHA);
-
-      
-      gameController.startGame(web3.fromAscii(mapSize), 10, gameSHA, itemSelectedForContract, seedNumber, (err, res) => {
+      gameController.startGame(web3.fromAscii(mapSize), 10, gameSHA, itemSelectedForContract, (err, res) => {
         if(err) {
           alert("You Denied to play the game.")
           return;
@@ -275,7 +271,7 @@ document.getElementById('start-btn').addEventListener('click', function() {
             $(".flex-body").html(a);
           }
          });
-         console.log(res); // txn reciept hash?
+        //  console.log(res); // txn reciept hash?
       });
     })
   }
