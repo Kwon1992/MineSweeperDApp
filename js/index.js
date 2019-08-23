@@ -1,4 +1,4 @@
-const controllerAddr="0xf78F23C27B90fAa8087D0B452eB4647371711319",controllerAbi=[ { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "users", "outputs": [ { "name": "gamerID", "type": "address" }, { "name": "totalGameCount", "type": "uint256" }, { "name": "isPlaying", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "difficulty", "type": "bytes2" }, { "indexed": false, "name": "gameHex", "type": "bytes32" }, { "indexed": false, "name": "useItem", "type": "bool[3]" }, { "indexed": false, "name": "totalGameCount", "type": "uint256" } ], "name": "START", "type": "event" }, { "anonymous": false, "inputs": [], "name": "WIN", "type": "event" }, { "anonymous": false, "inputs": [], "name": "LOSE", "type": "event" }, { "anonymous": false, "inputs": [], "name": "REGISTER", "type": "event" }, { "constant": false, "inputs": [], "name": "buyMagnet", "outputs": [ { "name": "", "type": "bool" } ], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [ { "name": "sellAmount", "type": "uint256" } ], "name": "sellMagnet", "outputs": [ { "name": "", "type": "bool" } ], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [], "name": "buyMagnetField", "outputs": [ { "name": "", "type": "bool" } ], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "getMagnetBalance", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getMagnetFieldBalance", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_useItems", "type": "bool[3]" } ], "name": "useItems", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_difficulty", "type": "bytes2" }, { "name": "_gameCost", "type": "uint8" }, { "name": "_gameHex", "type": "bytes32" }, { "name": "_useItem", "type": "bool[3]" } ], "name": "startGame", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_gameHex", "type": "bytes32" }, { "name": "_isWinner", "type": "bool" } ], "name": "endGame", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getTotalGameCount", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "index", "type": "uint256" } ], "name": "getGameResults", "outputs": [ { "name": "difficulty", "type": "bytes2" }, { "name": "gameHex", "type": "bytes32" }, { "name": "result", "type": "uint8" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "amount", "type": "uint256" } ], "name": "exchangeTokens", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getUserInfo", "outputs": [ { "name": "_gamerID", "type": "address" }, { "name": "_totalGameCount", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" } ];
+const controllerAddr="0x035Dc32f026a8664F1F5C57Fdb2Fa077Ca90471e",controllerAbi=[ { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "bytes32" } ], "name": "users", "outputs": [ { "name": "gamerID", "type": "address" }, { "name": "totalGameCount", "type": "uint256" }, { "name": "isPlaying", "type": "bool" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [ { "indexed": false, "name": "difficulty", "type": "bytes2" }, { "indexed": false, "name": "gameHex", "type": "bytes32" }, { "indexed": false, "name": "useItem", "type": "bool[3]" }, { "indexed": false, "name": "totalGameCount", "type": "uint256" } ], "name": "START", "type": "event" }, { "anonymous": false, "inputs": [], "name": "WIN", "type": "event" }, { "anonymous": false, "inputs": [], "name": "LOSE", "type": "event" }, { "anonymous": false, "inputs": [], "name": "REGISTER", "type": "event" }, { "constant": false, "inputs": [], "name": "buyMagnet", "outputs": [ { "name": "", "type": "bool" } ], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [ { "name": "sellAmount", "type": "uint256" } ], "name": "sellMagnet", "outputs": [ { "name": "", "type": "bool" } ], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": false, "inputs": [], "name": "buyMagnetField", "outputs": [ { "name": "", "type": "bool" } ], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "getMagnetBalance", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getMagnetFieldBalance", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "_useItems", "type": "bool[3]" } ], "name": "useItems", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_difficulty", "type": "bytes2" }, { "name": "_gameCost", "type": "uint8" }, { "name": "_gameHex", "type": "bytes32" }, { "name": "_useItem", "type": "bool[3]" } ], "name": "startGame", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": false, "inputs": [ { "name": "_gameHex", "type": "bytes32" }, { "name": "_isWinner", "type": "bool" } ], "name": "endGame", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getTotalGameCount", "outputs": [ { "name": "", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [ { "name": "index", "type": "uint256" } ], "name": "getGameResults", "outputs": [ { "name": "difficulty", "type": "bytes2" }, { "name": "gameHex", "type": "bytes32" }, { "name": "result", "type": "uint8" } ], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [ { "name": "amount", "type": "uint256" } ], "name": "exchangeTokens", "outputs": [ { "name": "", "type": "bool" } ], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "getUserInfo", "outputs": [ { "name": "_gamerID", "type": "address" }, { "name": "_totalGameCount", "type": "uint256" } ], "payable": false, "stateMutability": "view", "type": "function" } ];
 
 
 var mapSize = "";
@@ -50,10 +50,11 @@ function loadContract() {
 //Core Functions (핵심 함수)
 function loadUserInfo(){
   web3.eth.getAccounts(function(e,r){ 
+    console.log(r);
     document.getElementById('user-name').innerHTML =  r[0];
     accountAddr = r[0];
+    getTokens();
   });
-  getTokens();
 }
 
 
@@ -289,40 +290,44 @@ document.getElementById('start-btn').addEventListener('click', function() {
 // })
 
 // game history
-let recentGameIndex;
-let gameResults= [];
+
+
 
 function getGameResults() {
+  let recentGameIndex;
   const table = document.getElementById("history-table");
   var userResultData ="";
   var i = 0;
-
-  console.log(gameController);
-  gameController.getTotalGameCount( function(err,res) {
-    if(err) {
-      console.log(err);
+  web3.eth.getAccounts(function(err,res){
+    console.log(res[0])
+    gameController.getTotalGameCount( function(err,res) {
+   
       recentGameIndex = 0;
-      return ;
-    } else {
-      recentGameIndex = (res.toNumber());
-      while(recentGameIndex >0 && i <5) {
-        gameController.getGameResults(recentGameIndex, (err, res) => {
-          console.log(res);
-          userResultData += `<tr><td>${convertToDifficulty(res[0])}</td><td>${res[1]}</td><td>${res[2].toNumber() === 0? 'WIN' : 'LOSE'}</td></tr>`
-          var tableContents = `<thead>
-          <tr>
-              <th>Difficulty</th><th>GameHex</th><th>Result</th>
-          </tr>
-          </thead>
-          <tbody>`+ userResultData + `</tbody>`;
-          // console.log(userResultData);
-          // parsing userResultData and convert to table row for show in html files.
-          table.innerHTML = tableContents; 
-        });
-        recentGameIndex--;
-        i++;
+      if(err) {
+        console.log(err);
+        return ;
+      } else {
+        recentGameIndex = (res.toNumber());
+        console.log(recentGameIndex)
+        while(recentGameIndex >0 && i <5) {
+          gameController.getGameResults(recentGameIndex, (err, res) => {
+            console.log(res);
+            userResultData += `<tr><td>${convertToDifficulty(res[0])}</td><td>${res[1]}</td><td>${res[2].toNumber() === 0? 'WIN' : 'LOSE'}</td></tr>`
+            var tableContents = `<thead>
+            <tr>
+                <th>Difficulty</th><th>GameHex</th><th>Result</th>
+            </tr>
+            </thead>
+            <tbody>`+ userResultData + `</tbody>`;
+            // console.log(userResultData);
+            // parsing userResultData and convert to table row for show in html files.
+            table.innerHTML = tableContents; 
+          });
+          recentGameIndex--;
+          i++;
+        }
       }
-    }
+    })
   })
 }
 
@@ -346,8 +351,9 @@ async function initIndexPage() {
 }
 
 
+initIndexPage();
 
-initIndexPage()
+
 //variables
 // Secondary Functions (부차적 함수)
 function getLink(addr) {
