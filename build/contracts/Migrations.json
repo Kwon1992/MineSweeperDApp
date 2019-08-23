@@ -1479,12 +1479,12 @@
     "1566548747340": {
       "events": {},
       "links": {},
-      "address": "0x211F3D135e12859502462a1227B1e306f437a01b",
-      "transactionHash": "0x031994e4c720ef82bf4c3c65375f19b91c84bf274bc76bdfa78ad518ed61b818"
+      "address": "0x3541c77132d49420152B4254707F3443aB41990a",
+      "transactionHash": "0x48b9a175bff2b5b81eba5e999256bc14a7b2dc78c8de291c302f2c1efd829dfd"
     }
   },
   "schemaVersion": "3.0.11",
-  "updatedAt": "2019-08-23T08:26:07.400Z",
+  "updatedAt": "2019-08-23T09:54:37.680Z",
   "devdoc": {
     "methods": {}
   },

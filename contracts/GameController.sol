@@ -24,7 +24,7 @@ contract GameController {
         address gamerID; // User account address
         uint256 totalGameCount;  // to tracking recent gameResult.
         bool isPlaying; // check progress of the game
-        // bool isExistUser;
+        uint256 seedNumber; // for making SHA3 in contract
         mapping (uint256 => GameLog) logs; // start from 0 to N.... (game result log)
     }
 
@@ -116,11 +116,12 @@ contract GameController {
      * bool isPlaying;
      *}
      */
-    function register(bytes32 userIdentificator) private {
-        UserInfo storage user = users[userIdentificator];
+    function register(bytes32 _userIdentificator, uint256 _seedNumber) private {
+        UserInfo storage user = users[_userIdentificator];
 
         user.gamerID = msg.sender;
         user.totalGameCount = 0;
+        user.seedNumber = _seedNumber;
         user.isPlaying = false;
         // user.isExistUser = true;
 
@@ -163,15 +164,16 @@ contract GameController {
      * @param _gameCost 게임 시작에 사용한 Magnet 토큰 양을 front-end에서 받아온다.
      * @param _gameHex 게임의 transparency를 위한 sha256 value를 front-end에서 받아온다.
      * @param _gameCost 게임 시작에 사용한 Magnet 토큰 양을 front-end에서 받아온다.
+     * @param _seedNumber  SHA 계산을 위해 사용할 random integer. (처음 유저 등록 시 결정됨)
      */
-    function startGame(bytes2 _difficulty, uint8 _gameCost, bytes32  _gameHex, bool[3] memory _useItem) public{
+    function startGame(bytes2 _difficulty, uint8 _gameCost, bytes32  _gameHex, bool[3] memory _useItem, uint256 _seedNumber) public{
         bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
         require(_gameCost == BET_TOKEN_AMOUNT, "You Does not bet 10 Magnet Tokens"); // Is gameCost same as the BET_TOKEN_AMOUNT
         require(Magnet(tokensAddr[0]).balanceOf(msg.sender) >= BET_TOKEN_AMOUNT, "Not Enough Magnet Tokens"); // check Magnet balance of Users.
         if(user.gamerID == address(0)) { // No User Data (Newbie)
-            register(userIdentificator);
+            register(userIdentificator, _seedNumber);
         }
 
         //double check user existence
@@ -183,8 +185,10 @@ contract GameController {
         // write game log
         GameLog storage log = user.logs[user.totalGameCount];
         log.difficulty = _difficulty;
-        log.gameHex = _gameHex;
         log.result = GameResult.LOSE;
+
+        // contract 단에서 hex 계산 및 추가는 못할까???
+        log.gameHex = keccak256(abi.encodePacked(_gameHex, user.seedNumber));
 
         for (uint i = 0 ; i < 3; i++) {
             log.useItem[i] = _useItem[i];
@@ -207,14 +211,15 @@ contract GameController {
     function endGame(bytes32 _gameHex, bool _isWinner) public {
         bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
+        GameLog storage log = user.logs[user.totalGameCount];
+        bytes32 calcHex = keccak256(abi.encodePacked(_gameHex, user.seedNumber));
 
         // check user is in contract's database.
         require(user.gamerID != address(0), "No User Data: endGame");
+        require(user.totalGameCount != 0, "No Game History");
 
-        GameLog storage log = user.logs[user.totalGameCount];
         // _gameHex recheck(compare with log's hex value :: RECENT GAME!!)
-
-        require(log.gameHex == _gameHex, "No such Game in logs: endGame");
+        require(log.gameHex == calcHex, "No such Game in logs: endGame");
 
         //update game result. and reward to users depending on the result of final game.
        // ture : WIN, false : LOSE [get values from front-end game]
@@ -246,16 +251,6 @@ contract GameController {
     }
 
     /**
-     * @dev 패배한 유저에게 게임 보상을 한다
-     * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
-     */
-    // function rewardLoser(bytes2 _difficulty) internal returns (bool) {
-    //     require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender), "Revert from MagnetF : rewardLoser");
-    //     return true;
-    // }
-
-
-    /**
      * @dev 특정 유저의 총 게임 횟수를 반환한다.
      * @return 특정 유저의 총 게임 횟수.
      */
@@ -263,7 +258,6 @@ contract GameController {
         UserInfo memory user = users[keccak256(abi.encodePacked(msg.sender))];
         return user.totalGameCount;
     }
-
     /**
      * @dev 유저의 특정(index) 게임 결과를 보여준다.
      *      Solidity 특성 상 mapping을 전체 순회할 수 없기때문에 index를 활용한다.
