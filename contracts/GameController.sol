@@ -16,6 +16,7 @@ contract GameController {
     struct GameLog { // use for game log!
         bytes32 gameHex; // use for transparency. (when start the game, )
         bytes2 difficulty; // EZ, NM, HD - necessary?
+        bool isRewarded; 
         GameResult result; //default : LOSE ***WIN/LOSE/ 2 (NOT FOUND)
         bool[3] useItem; //default: false(SHIELD), false(FirstCell), false(ShowMap)
     }
@@ -48,21 +49,13 @@ contract GameController {
 
     // when users start the game
     event START(bytes2 difficulty, bytes32 gameHex, bool[3] useItem, uint256 totalGameCount); //BombHex -> keccak256(bombCoords)
-
-    // event START_ERR_ITEM();
-    // event START_ERR_TOKEN();
-
     // when the game is over.
-    event WIN();
-    event LOSE();
-    event REGISTER();
-
+    event WIN();    event LOSE();    event REGISTER();
 
     function buyMagnet() public payable returns (bool) {
         uint256 amount = msg.value / Magnet(tokensAddr[0]).getTokenPrice();
         Magnet(tokensAddr[0]).buyTokens(amount, msg.sender);
     }
-
 
     /*
     function getETH() public view returns (uint256) {
@@ -77,6 +70,7 @@ contract GameController {
         return true;
     }
     */
+
     // 1Magnet = 0.001ETH 1000
     function sellMagnet(uint sellAmount) public payable returns (bool) {
         bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
@@ -96,7 +90,6 @@ contract GameController {
 
 
     function buyMagnetField() public payable returns (bool) {
-        
         MagnetField(tokensAddr[1]).getTokens(100000, msg.sender);
     }
 
@@ -109,19 +102,14 @@ contract GameController {
     }
     /**
      * @dev 게임 시작 전 만약 처음 게임을 하는 유저라면 게임DB에 유저정보를 등록한다.
-     *struct UserInfo {
-     * address payable gamerID; // User account address
-     * uint256 totalGameCount;  // to tracking recent GameResult.
-     * mapping (uint256 => GameResult) results; // start from 0 to N.... (game result log)
-     * bool isPlaying;
-     *}
+     * @param _userIdentificator userInfo Map의 key (keccak256 결과값)
+
      */
-    function register(bytes32 _userIdentificator, uint256 _seedNumber) private {
+    function register(bytes32 _userIdentificator) private {
         UserInfo storage user = users[_userIdentificator];
 
         user.gamerID = msg.sender;
         user.totalGameCount = 0;
-        user.seedNumber = _seedNumber;
         user.isPlaying = false;
         // user.isExistUser = true;
 
@@ -145,35 +133,19 @@ contract GameController {
     }
     /**
      * @dev 게임 시작 시 실행되는 함수로써 유저정보 최신화 및 게임로그 기록을 한 후 START 이벤트를 발생시킨다.
-     *struct UserInfo {
-     * address payable gamerID; // User account address
-     * uint256 totalGameCount;  // to tracking recent GameResult.
-     * mapping (uint256 => GameResult) results; // start from 0 to N.... (game result log)
-     * bool isPlaying;
-     * bool isExistUser;
-     *}
-     *
-     *
-     *struct GameResult { // use for game log!
-     * bytes32 gameHex; // use for transparency. (when start the game, )
-     * bytes2 difficulty; // EZ, NM, HD - necessary?
-     * bool isWinner; //default : false ***true: win the game, false: lose the game
-     * bool useItem; //default: false
-     *}
      * @param _difficulty 게임의 난이도를 front-end에서 받아온다.
      * @param _gameCost 게임 시작에 사용한 Magnet 토큰 양을 front-end에서 받아온다.
      * @param _gameHex 게임의 transparency를 위한 sha256 value를 front-end에서 받아온다.
      * @param _gameCost 게임 시작에 사용한 Magnet 토큰 양을 front-end에서 받아온다.
-     * @param _seedNumber  SHA 계산을 위해 사용할 random integer. (처음 유저 등록 시 결정됨)
      */
-    function startGame(bytes2 _difficulty, uint8 _gameCost, bytes32  _gameHex, bool[3] memory _useItem, uint256 _seedNumber) public{
+    function startGame(bytes2 _difficulty, uint8 _gameCost, bytes32  _gameHex, bool[3] memory _useItem) public{
         bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
 
         require(_gameCost == BET_TOKEN_AMOUNT, "You Does not bet 10 Magnet Tokens"); // Is gameCost same as the BET_TOKEN_AMOUNT
         require(Magnet(tokensAddr[0]).balanceOf(msg.sender) >= BET_TOKEN_AMOUNT, "Not Enough Magnet Tokens"); // check Magnet balance of Users.
         if(user.gamerID == address(0)) { // No User Data (Newbie)
-            register(userIdentificator, _seedNumber);
+            register(userIdentificator);
         }
 
         //double check user existence
@@ -186,9 +158,8 @@ contract GameController {
         GameLog storage log = user.logs[user.totalGameCount];
         log.difficulty = _difficulty;
         log.result = GameResult.LOSE;
-
-        // contract 단에서 hex 계산 및 추가는 못할까???
-        log.gameHex = keccak256(abi.encodePacked(_gameHex, user.seedNumber));
+        log.isRewarded = false;
+        log.gameHex = _gameHex;
 
         for (uint i = 0 ; i < 3; i++) {
             log.useItem[i] = _useItem[i];
@@ -212,14 +183,14 @@ contract GameController {
         bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
         UserInfo storage user = users[userIdentificator];
         GameLog storage log = user.logs[user.totalGameCount];
-        bytes32 calcHex = keccak256(abi.encodePacked(_gameHex, user.seedNumber));
 
         // check user is in contract's database.
         require(user.gamerID != address(0), "No User Data: endGame");
         require(user.totalGameCount != 0, "No Game History");
 
         // _gameHex recheck(compare with log's hex value :: RECENT GAME!!)
-        require(log.gameHex == calcHex, "No such Game in logs: endGame");
+        require(log.gameHex == _gameHex, "No such Game in logs: endGame");
+        require(log.isRewarded != true, "Already Rewarded Game: endGame");
 
         //update game result. and reward to users depending on the result of final game.
        // ture : WIN, false : LOSE [get values from front-end game]
@@ -229,13 +200,15 @@ contract GameController {
             log.result = GameResult.LOSE;
         }
 
-        rewardUser(log.difficulty, _isWinner);
-        //보상 Magnet 과 MagnetField...
-
+        if(rewardUser(log.difficulty, _isWinner)) {
+            log.isRewarded = true;
+        }
     }
 
     /**
      * @dev 유저의 게임결과에 따라 보상을 지급한다
+     * @param  _difficulty 게임 난이도
+     * @param  _isWinner 게임 성공여부
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
     function rewardUser(bytes2 _difficulty, bool _isWinner) internal returns (bool) {
@@ -280,15 +253,17 @@ contract GameController {
             gameHex = log.gameHex;
             result = log.result;
         }
+
     }
 
     /**
      * @dev MagnetField 토큰을 Magnet 토큰으로 교환시켜주도록 요청한다.
+     * @param  _amount 교환하고자 하는 Magnet 토큰 량
      * @return 정상적으로 transaction이 이루어진 경우 true를 반환한다.
      */
-     function exchangeTokens(uint256 amount) public returns (bool) {
-        require(MagnetField(tokensAddr[1]).exchangeTokens(amount, msg.sender),"Revert from MagnetF : exchangeTokens"); // magnetField 토큰을 감소시킨다.
-        require(Magnet(tokensAddr[0]).exchangeTokens(amount, msg.sender), "Revert from Magnet : exchangeTokens"); // magnet 토큰을 증가시킨다.
+     function exchangeTokens(uint256 _amount) public returns (bool) {
+        require(MagnetField(tokensAddr[1]).exchangeTokens(_amount, msg.sender),"Revert from MagnetF : exchangeTokens"); // magnetField 토큰을 감소시킨다.
+        require(Magnet(tokensAddr[0]).exchangeTokens(_amount, msg.sender), "Revert from Magnet : exchangeTokens"); // magnet 토큰을 증가시킨다.
         return true;
      }
 
