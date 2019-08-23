@@ -255,9 +255,6 @@ document.getElementById('start-btn').addEventListener('click', function() {
     return;
   } else {
 
-    var gameSHA = web3.sha3(mapSize+ accountAddr.toString()+ Date.now());
-    console.log(`gameSHA : ${gameSHA}`);
-    sessionStorage.setItem("gameID", gameSHA);
 
     for (const item in itemSelected) {
       if (itemSelected.hasOwnProperty(item)) {
@@ -266,21 +263,25 @@ document.getElementById('start-btn').addEventListener('click', function() {
     }
 
     console.log(sessionStorage);
-    gameController.startGame(web3.fromAscii(mapSize), 10, gameSHA, itemSelectedForContract, (err, res) => {
-      if(err) {
-        alert("You Denied to play the game.")
-        return;
-      }
-      $.ajax({
-        type:"get",
-        url:"game.html",
-        success: function test(a) {
-          $(".flex-body").html(a);
+
+    gameController.getTotalGameCount({from:accountAddr}, function(err, res) {
+      var gameSHA = web3.sha3(mapSize + accountAddr.toString() + (res.toNumber()+1));
+      console.log("BEFORE GAME START __ GAME ID : " + gameSHA)
+      gameController.startGame(web3.fromAscii(mapSize), 10, gameSHA, itemSelectedForContract, (err, res) => {
+        if(err) {
+          alert("You Denied to play the game.")
+          return;
         }
-       });
-       console.log(sessionStorage)
-       console.log(res); // txn reciept hash?
-    });
+        $.ajax({
+          type:"get",
+          url:"game.html",
+          success: function test(a) {
+            $(".flex-body").html(a);
+          }
+         });
+         console.log(res); // txn reciept hash?
+      });
+    })
   }
 });
 

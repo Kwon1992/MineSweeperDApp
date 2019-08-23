@@ -592,38 +592,56 @@ function render() {
   
   if (hitBomb) { // 폭탄을 건드렸다면...
     document.getElementById('reset').innerHTML = '<img src=images/dead-face.png>'; // 사망!
-    console.log(winner);
-    console.log(hitBomb);
-    console.log((winner && !hitBomb));
+    console.log(`winner : ${winner}`);
+    console.log(`hitBomb : ${hitBomb}`);
+    console.log(`winner && hitBom : ${(winner && !hitBomb)}`);
     alert("Accept the Transaction if you want to get rewards!");
-    gameController.endGame(sessionStorage.getItem("gameID"), (winner && !hitBomb) , function(err,res) {
-      if(err) {
-        console.log(err);
-      }
-      console.log(res);
-      runCodeForAllCells(function(cell) { // 모든 cell에 대해서 해당 함수 적용
-        if (!cell.isBomb && cell.flagged) { // flag 표시가 되었으나 폭탄이 아닌 cell에 대해서...
-          var td = document.querySelector(`[data-row="${cell.row}"][data-col="${cell.col}"]`); // 해당 셀의 좌표 td에 담음
-          td.innerHTML = wrongBombImage; // 잘못된 폭탄 이미지 넣음
+
+    gameController.getTotalGameCount({from:accountAddr}, function(err, res) {
+      var gameSHA = web3.sha3(mapSize + accountAddr.toString() + res.toNumber());
+  
+      gameController.endGame(gameSHA, (winner && !hitBomb) , function(err,res) {
+        if(err) {
+          console.log(err);
         }
-      });
-      popUp();
+        console.log(res);
+        runCodeForAllCells(function(cell) { // 모든 cell에 대해서 해당 함수 적용
+          if (!cell.isBomb && cell.flagged) { // flag 표시가 되었으나 폭탄이 아닌 cell에 대해서...
+            var td = document.querySelector(`[data-row="${cell.row}"][data-col="${cell.col}"]`); // 해당 셀의 좌표 td에 담음
+            td.innerHTML = wrongBombImage; // 잘못된 폭탄 이미지 넣음
+          }
+        });
+        document.getElementById('hashValue').innerHTML = res;
+        $('#myModal').delay(1500).show(0);
+      })
     })
 
   } else if (winner) { // winner라면
-    alert("Accept the Transaction if you want to get rewards!");
-    gameController.endGame(sessionStorage.getItem("gameID"), (winner && !hitBomb) , function(err,res) {
-      if(err) {
-        console.log(err);
-        
-      }
-      console.log(res);
-    })
     document.getElementById('reset').innerHTML = '<img src=images/cool-face.png>';
     
     clearInterval(timerId); // interval 종료
 
-    popUp();
+    console.log(`winner : ${winner}`);
+    console.log(`hitBomb : ${hitBomb}`);
+    console.log(` winner && hitBom : ${(winner && !hitBomb)}`);
+
+    alert("Accept the Transaction if you want to get rewards!");
+
+    gameController.getTotalGameCount({from:accountAddr}, function(err, res) {
+      var gameSHA = web3.sha3(mapSize + accountAddr.toString() + res.toNumber());
+      console.log("AFTER GAME START __ GAME ID : " + gameSHA)
+      console.log(gameSHA)
+      gameController.endGame(gameSHA, (winner && !hitBomb) , function(err,res) {
+        if(err) {
+          console.log(err);
+          
+        }
+        console.log(res);
+        document.getElementById('hashValue').innerHTML = res;
+        $('#myModal').delay(1500).show(0);
+      })
+    })
+
   }
 
   
@@ -639,9 +657,7 @@ function runCodeForAllCells(cb) {
 }
 
 
-function popUp(){
-  document.getElementById('hashValue').innerHTML = sessionStorage.getItem("gameID");
-  $('#myModal').delay(1500).show(0);
+function popUp(res){
 }
 // function close_pop(flag) { // eventlistener
 //   $('#myModal').hide();
