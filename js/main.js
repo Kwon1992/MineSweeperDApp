@@ -657,13 +657,6 @@ function runCodeForAllCells(cb) {
 }
 
 
-function popUp(res){
-}
-// function close_pop(flag) { // eventlistener
-//   $('#myModal').hide();
-// };
-
-
 
 init();
 render(); 

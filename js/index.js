@@ -316,7 +316,7 @@ function getGameResults() {
             userResultData += `<tr><td>${convertToDifficulty(res[0])}</td><td>${res[1]}</td><td>${res[2].toNumber() === 0? 'WIN' : 'LOSE'}</td></tr>`
             var tableContents = `<thead>
             <tr>
-                <th>Difficulty</th><th>GameHex</th><th>Result</th>
+                <th>Difficulty</th><th>Game Hash</th><th>Result</th>
             </tr>
             </thead>
             <tbody>`+ userResultData + `</tbody>`;
