@@ -6,6 +6,43 @@ const GameController = artifacts.require("GameController");
 // contract와 web3 통신법...? ==> transaction reciept를 이용한다.
 
 
+/*
+ 요구사항?? => Test Case 이용.
+*/
+
+
+/*
+Unit Testing Complete 
+   (a. GameStart Function) 
+      a-1. bet token amount correctly
+      a-2. bet token amount incorrectly
+      a-3. sufficient token balance
+      a-4. insufficient token balance
+   (b. get Token Balances Function) - 2 Token Balances
+      b-1. get Magnet token balance
+      b-2. get MagnetField token balance
+   (c. get Total Game Count Function) - Increase Correctly
+      c-1. check total game count increase correctly
+   (d. get UserInfo Function)
+      d-1. check registered user's information.
+      d-2. check unregistered user's information.
+   (e. buy Items Function) - 1 Item / 2 Items / 3 Items
+      e-1. check MagnetField token decrease correctly
+      e-2. test when buy only 1 item.
+      e-3. test when buy 2 items.
+      e-4. test when buy all items.
+      e-5. check unable to buy itmes when user has insufficient MagnetField Balance.
+   (f. get Game Result Function) - Recent 5 Games
+      f-1. check get recent game history correctly.
+      f-2. less than 5 games
+   (g. reward User Function) - WIN / LOSE
+      g-1. when win the game.
+      g-2. when lose the game.
+
+   ** 토큰 교환
+*/
+
+
 // Mocha 형식 사용!
 contract('GameController', function([deployer, user1, user2]) {
     // deployer, user1, user2에는 Account 주소가 각각 들어간다.
@@ -44,7 +81,7 @@ contract('GameController', function([deployer, user1, user2]) {
         })
     });
 
-    
+    // TEST #2) 
     describe('View Token Balance', () => {
         // == SOLVED!! ==
         it('Manget Tokens Balance', async () => {
@@ -60,6 +97,7 @@ contract('GameController', function([deployer, user1, user2]) {
         
     });
     
+    // TEST #3) 
     // gameStart한 경우 user의 totalGameCount가 정상적으로 증가하는지 테스트.
     // problem #1: 정상적으로 상승하지 않음...
     // == SOLVED!! ==
@@ -91,6 +129,7 @@ contract('GameController', function([deployer, user1, user2]) {
         
     });
 
+    // TEST #4) 
     // userInfo를 불러오기
     // == SOLVED!! ==
     describe('Check get UserInfo correctly', () => {
@@ -128,6 +167,7 @@ contract('GameController', function([deployer, user1, user2]) {
     });
     
 
+    // TEST #5) 
     // Item 구매하기
     // == SOLVED!! == :정상적으로 토큰 감소됨.
     describe('Buy Items', () => {
@@ -180,6 +220,7 @@ contract('GameController', function([deployer, user1, user2]) {
         });
     });
 
+    // TEST #6) 
     // 게임결과 가져오기 
     // == SOLVED!! ==
     describe('Get Game Results', () => {
@@ -214,6 +255,7 @@ contract('GameController', function([deployer, user1, user2]) {
         });
     });
 
+    // TEST #7) 
     // 게임결과에 따른 보상주기
     // == SOLVED!! ==
     describe('Reward Users', () => {
