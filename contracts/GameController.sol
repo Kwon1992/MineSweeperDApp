@@ -25,7 +25,6 @@ contract GameController {
         address gamerID; // User account address
         uint256 totalGameCount;  // to tracking recent gameResult.
         bool isPlaying; // check progress of the game
-        uint256 seedNumber; // for making SHA3 in contract
         mapping (uint256 => GameLog) logs; // start from 0 to N.... (game result log)
     }
 
