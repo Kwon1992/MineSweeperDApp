@@ -173,7 +173,10 @@ boardEl.addEventListener('click', function(e) {
     hitBomb = cell.reveal(); // Cell을 열었을 때 폭탄 여부에 따른 true, false 반환
     
     if(sessionStorage.getItem("flag") === "true") {
-      bombCount -= 1;
+      if(bombCount !== 0) {
+        bombCount -= 1;
+      }
+
       sessionStorage.removeItem("flag");
     }
 
@@ -499,14 +502,13 @@ function  addBombs() { // 랜덤하게 폭탄 설치 core Function #4 _ updating
 */
 
 function useItem() {
-  var usedImte = sessionStorage.getItem("usedItem")
   if(sessionStorage.getItem("showStart") === "true"){
     while(true){
       var row = Math.floor(Math.random() * rowSize);
       var col = Math.floor(Math.random() * colSize);
       startCell = board[row][col];
 
-      if (!startCell.isBomb && startCell.col >= 3){
+      if (!startCell.isBomb && startCell.row >= 3){
         var td = document.querySelector(`[data-row="${startCell.row}"][data-col="${startCell.col}"]`);
         td.style.backgroundColor = "skyblue"
         break;
