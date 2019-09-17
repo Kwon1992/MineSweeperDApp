@@ -40,6 +40,11 @@ Unit Testing Complete
       g-2. when lose the game.
 
    ** 토큰 교환
+   추가할 test
+   h. token test
+    h-1. buy Magnet Token
+    h-2. exchange MagnetField to Magnet
+    
 */
 
 
