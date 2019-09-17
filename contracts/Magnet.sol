@@ -332,6 +332,8 @@ contract Magnet is IERC20, IMagnet{
     /**
      * @dev 특정량의 토큰을 공급가능한지(suppliableAmount), 또한 user의 balance에서 overflow가 발생하지 않는지 확인
      * @param _amount 체크하고 싶은 토큰량
+     * @param user 유저 계정 address
+     * @return 정상적으로 수행 시 true 반환.
      */
     function checkAmounts(uint256 _amount, address user) internal view returns (bool){
         require(suppliableAmount >= _amount, "Not enough Suppliable Tokens");
