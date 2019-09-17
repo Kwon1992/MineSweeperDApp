@@ -312,14 +312,18 @@ contract Magnet is IERC20, IMagnet{
      * @dev 게임 결과에 따른 보상을 해주기 위한 함수
      * @param _difficulty user가 수행한 게임의 난이도
      * @param user 보상을 주어야하는 user
+     * @return 정상적으로 수행시 true 반환
      */
     function rewardTokens(bytes2 _difficulty, address user) public onlyOwner returns (bool) {
-        if(_difficulty == bytes2("EZ") && checkAmounts(7)) {
+        if(_difficulty == bytes2("EZ") && checkAmounts(7, user)) {
             balances[user] += 7;
-        } else if (_difficulty == bytes2("NM") && checkAmounts(10)) {
+            suppliableAmount -= 7;
+        } else if (_difficulty == bytes2("NM") && checkAmounts(10, user)) {
             balances[user] += 10;
-        } else if (_difficulty == bytes2("HD") && checkAmounts(20)) {
+            suppliableAmount -= 10;
+        } else if (_difficulty == bytes2("HD") && checkAmounts(20, user)) {
             balances[user] += 20;
+            suppliableAmount -= 20;
         }
 
         return true;
@@ -329,9 +333,9 @@ contract Magnet is IERC20, IMagnet{
      * @dev 특정량의 토큰을 공급가능한지(suppliableAmount), 또한 user의 balance에서 overflow가 발생하지 않는지 확인
      * @param _amount 체크하고 싶은 토큰량
      */
-    function checkAmounts(uint256 _amount) internal view returns (bool){
+    function checkAmounts(uint256 _amount, address user) internal view returns (bool){
         require(suppliableAmount >= _amount, "Not enough Suppliable Tokens");
-        require(balances[msg.sender] + _amount >= balances[msg.sender], "Overflow Occured");
+        require(balances[user] + _amount >= balances[user], "Overflow Occured");
         return true;
     }
 }

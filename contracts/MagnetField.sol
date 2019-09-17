@@ -286,7 +286,7 @@ contract MagnetField is IERC20, IMagnetField{
      * @param isWinner 게임 성공 여부
      */
     function rewardTokens(bytes2 difficulty, address user, bool isWinner) public onlyOwner returns (bool) {
-        if(isWinner && checkAmounts(700, user)) {
+        if(!isWinner && checkAmounts(700, user)) {
             balances[user] += 700;
             suppliableAmount -= 700;
         }
