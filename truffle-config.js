@@ -18,7 +18,8 @@
  *
  */
 
-// const HDWalletProvider = require('truffle-hdwallet-provider');
+const HDWalletProvider = require('truffle-hdwallet-provider');
+var mnemonic = "same artist poem daring pass crystal lift subject venue donor pyramid tattoo";
 // const infuraKey = "fj4jll3k.....";
 //
 // const fs = require('fs');
@@ -48,6 +49,16 @@ module.exports = {
      gas: 8000000,
      network_id: "*",       // Any network (default: none)
     },
+    rinkeby: {
+      network_id: 4,
+      host: 'localhost',
+      provider: function() {
+        return new HDWalletProvider( mnemonic, "rinkeby.infura.io/v3/0335d6d3da2e417ca1f86bd159e981ec")
+      },
+      port:8545,
+      gas: 8000000,
+
+    }
 
     // Another network with more advanced options...
     // advanced: {
