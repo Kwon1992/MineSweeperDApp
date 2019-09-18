@@ -16,7 +16,7 @@ contract GameController {
     struct GameLog { // use for game log!
         bytes32 gameHex; // use for transparency. (when start the game, )
         bytes2 difficulty; // EZ, NM, HD - necessary?
-        bool isRewarded; 
+        bool isRewarded;
         GameResult result; //default : LOSE ***WIN/LOSE/ 2 (NOT FOUND)
         bool[3] useItem; //default: false(SHIELD), false(FirstCell), false(ShowMap)
     }
@@ -60,7 +60,7 @@ contract GameController {
     function getETH() public view returns (uint256) {
         return address(this).balance;
     }
-    
+
     //to send ETH to deployer.
     function sendETH() payable public returns (bool result) {
         require(msg.sender == minter);
@@ -77,7 +77,7 @@ contract GameController {
         uint256 getETH = (sellAmount * 1000000000000000);
 
         if(Magnet(tokensAddr[0]).sellTokens(sellAmount, msg.sender)) { // true
-        // ETH 주기 
+        // ETH 주기
             require(address(this).balance > getETH, "Not enough ETH in contracts... Plz contact to Deployer");
             require(seller != address(0x0) && seller == msg.sender, "Seller - Buyer Not Match");
             msg.sender.transfer(getETH);
