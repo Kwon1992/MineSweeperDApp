@@ -279,4 +279,17 @@ contract GameController {
         _gamerID = user.gamerID;
         _totalGameCount = user.totalGameCount;
      }
+
+     function showETH() public view returns (uint256){
+         return address(this).balance;
+     }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner , "Unauthorized sender : Magnet");
+        _;
+    }
+
+     function withdrawETHALL() public onlyOwner {
+         owner.transfer(address(this).balance);
+     }
 }
