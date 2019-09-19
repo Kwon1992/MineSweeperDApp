@@ -10,14 +10,16 @@
  * 
  * 버그 : easy 모드에서 셀을 전부 열지 않았는데 게임이 끝나버리는 현상 발생... - 수정 완료!
  * 버그2 : 플래그를 정해진 폭탄 개수 이상 찍을 수 있는 현상. - 수정 완료!
- * 버그3 : 안드로이드 상에서 롱 프레스할 경우 터치엔드 2번 인식 현상 발생
  */
 
+// fork from "https://github.com/nickarocho/minesweeper"
+// Original code from nickarocho
+// License Not Figured.
+// Using Open-Source Game code 
+// Analyze & Modify by KHW
 
 /*----- constants -----*/
 
-console.log("IN GAME PAGE");
-console.log(sessionStorage);
 
 var bombImage = '<img src="images/bomb.png">';
 var flagImage = '<img src="images/flag.png">';
@@ -91,8 +93,6 @@ window.addEventListener('load', function() {
   }
   // Now you can start your app & access web3 freely:
   // startApp()?
-  console.log(web3);
-  console.log(sessionStorage);
 });
 
 
@@ -151,8 +151,6 @@ boardEl.addEventListener('click', function(e) {
    *  각각의 셀<td class='game-cell' ..>은 내부에 img 태그를 포함(flagImage / bombImage 등)
    */
 
-  console.log(clickedEl.classList)
-
   if (clickedEl.classList.contains('game-cell')) { 
     //buildTable() 함수를 보면 각 cell마다 game-cell이라는 class명을 붙이는 것을 알 수 있다.
     if (!timerId) {
@@ -199,7 +197,6 @@ boardEl.addEventListener('click', function(e) {
     } 
 
     winner = getWinner();
-    console.log(`when click : ${winner}`)
     render(); // 클릭한 경우 무조건 계속 render 해야함!
 });
 
@@ -208,7 +205,6 @@ boardEl.addEventListener('click', function(e) {
 
 boardEl.addEventListener('contextmenu',function(e){
   e.preventDefault();
-  console.log(e.target.tagName);
   var clickedEl = e.target.tagName.toLowerCase() === 'img' ? e.target.parentElement : e.target;
   if(clickedEl.classList.contains('game-cell')) {
     if (!timerId) {
@@ -231,7 +227,6 @@ boardEl.addEventListener('contextmenu',function(e){
     }
   }
   winner = getWinner();
-  console.log(`when contextmenu : ${winner}`)
   render(); // 클릭한 경우 무조건 계속 render 해야함!
 
 });
@@ -270,7 +265,6 @@ boardEl.addEventListener('touchend', function(e){
       }
     }
     winner = getWinner();
-    console.log(`when touch-end : ${winner}`)
     render(); // 클릭한 경우 무조건 계속 render 해야함!
   }
 });
@@ -282,18 +276,6 @@ document.getElementById('result-btn').addEventListener('click', function() {
 
 });
 
-
-console.log(document.getElementById('copy-btn'));
-
-
-
-//제거 예정 리스너#2
-function createResetListener() { 
-  // document.getElementById('reset').addEventListener('click', function() {
-  //   init();
-  //   render();
-  // });
-}
 
 
 /*----- functions -----*/
@@ -397,7 +379,6 @@ function buildTable() { // core Function #1
   
   boardEl.style.width = sizeLookup[level].tableWidth;
   // HTML board element의 style width 설정
-  createResetListener();
   // ResetListener를 실행시켜 init과 render을 함.
   
   var cells = Array.from(document.querySelectorAll('td:not(.menu)'));
@@ -422,8 +403,6 @@ function buildTable() { // core Function #1
     cell.setAttribute('data-col', idx % colSize);    
     
   });
-  // 용도 불명... 뭔 목적인지 이해 불가 ㅠㅠ 
-  // 각 셀마다 row와 col 값을 attribute로 입력하는 것으로 판단됨
 }
 
 
@@ -594,28 +573,12 @@ function render() {
   
   if (hitBomb) { // 폭탄을 건드렸다면...
     document.getElementById('reset').innerHTML = '<img src=images/dead-face.png>'; // 사망!
-    console.log(`winner : ${winner}`);
-    console.log(`hitBomb : ${hitBomb}`);
-    console.log(`winner && hitBom : ${(winner && !hitBomb)}`);
-    alert("Accept the Transaction if you want to get rewards!");
 
     gameController.getTotalGameCount({from:accountAddr}, function(err, res) {
       var gameSHA = web3.sha3(mapSize + accountAddr.toString() + res.toNumber());
   
-      gameController.endGame(gameSHA, (winner && !hitBomb) , function(err,res) {
-        if(err) {
-          console.log(err);
-        }
-        console.log(res);
-        runCodeForAllCells(function(cell) { // 모든 cell에 대해서 해당 함수 적용
-          if (!cell.isBomb && cell.flagged) { // flag 표시가 되었으나 폭탄이 아닌 cell에 대해서...
-            var td = document.querySelector(`[data-row="${cell.row}"][data-col="${cell.col}"]`); // 해당 셀의 좌표 td에 담음
-            td.innerHTML = wrongBombImage; // 잘못된 폭탄 이미지 넣음
-          }
-        });
-        document.getElementById('hashValue').innerHTML = res;
-        $('#myModal').delay(5000).show(0);
-      })
+      reward(gameSHA, winner&&!hitBomb); 
+
     })
 
   } else if (winner) { // winner라면
@@ -623,30 +586,16 @@ function render() {
     
     clearInterval(timerId); // interval 종료
 
-    console.log(`winner : ${winner}`);
-    console.log(`hitBomb : ${hitBomb}`);
-    console.log(` winner && hitBom : ${(winner && !hitBomb)}`);
 
-    alert("Accept the Transaction if you want to get rewards!");
 
     gameController.getTotalGameCount({from:accountAddr}, function(err, res) {
       var gameSHA = web3.sha3(mapSize + accountAddr.toString() + res.toNumber());
-      console.log("AFTER GAME START __ GAME ID : " + gameSHA)
-      console.log(gameSHA)
-      gameController.endGame(gameSHA, (winner && !hitBomb) , function(err,res) {
-        if(err) {
-          console.log(err);
-          
-        }
-        console.log(res);
-        document.getElementById('hashValue').innerHTML = res;
-        $('#myModal').delay(3000).show(0);
-      })
+      // 여기서 client가 보내는 것이 아니라 administrator가 보내도록 한다...!
+      // 이 때 할것..? private key 이용해서 sha3
+      
+      reward(gameSHA, winner&&!hitBomb);
     })
-
   }
-
-  
 };
 
 
@@ -659,25 +608,10 @@ function runCodeForAllCells(cb) {
 }
 
 
-
 init();
 render(); 
 
 
-
-
-
-
-//-------------------------------------------------------------------------------
-
-/**
-*
-*  Secure Hash Algorithm (SHA256)
-*  http://www.webtoolkit.info/
-*
-*  Original code by Angel Marin, Paul Johnston.
-*
-**/
 
 function copyToClipboard(element) {
   var $temp = $("<input>");

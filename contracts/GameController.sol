@@ -35,7 +35,6 @@ contract GameController {
     }
 
 
-    // https://ethereum.stackexchange.com/questions/7713/how-does-mapping-work (참고.. mapping 동작 방식)
 
     // constants
     uint8 constant internal BET_TOKEN_AMOUNT = 10;
@@ -56,19 +55,6 @@ contract GameController {
         Magnet(tokensAddr[0]).buyTokens(amount, msg.sender);
     }
 
-    /*
-    function getETH() public view returns (uint256) {
-        return address(this).balance;
-    }
-
-    //to send ETH to deployer.
-    function sendETH() payable public returns (bool result) {
-        require(msg.sender == minter);
-        require(getETH() > 0);
-        msg.sender.transfer(address(this).balance);
-        return true;
-    }
-    */
 
     // 1Magnet = 0.001ETH 1000
     function sellMagnet(uint sellAmount) public payable returns (bool) {
@@ -110,7 +96,6 @@ contract GameController {
         user.gamerID = msg.sender;
         user.totalGameCount = 0;
         user.isPlaying = false;
-        // user.isExistUser = true;
 
         emit REGISTER();
     }
@@ -178,8 +163,8 @@ contract GameController {
      * @param _gameHex 기존 게임 로그와의 비교를 통해 조작 여부를 확인한다.
      * @param _isWinner 게임 승리 여부를 확인하기 위한 bool parameter
      */
-    function endGame(bytes32 _gameHex, bool _isWinner) public {
-        bytes32 userIdentificator = keccak256(abi.encodePacked(msg.sender));
+    function endGame(bytes32 _gameHex, bool _isWinner, address userAddr) public {
+        bytes32 userIdentificator = keccak256(abi.encodePacked(userAddr));
         UserInfo storage user = users[userIdentificator];
         GameLog storage log = user.logs[user.totalGameCount];
 
@@ -199,7 +184,7 @@ contract GameController {
             log.result = GameResult.LOSE;
         }
 
-        if(rewardUser(log.difficulty, _isWinner)) {
+        if(rewardUser(log.difficulty, _isWinner, userAddr)) {
             log.isRewarded = true;
         }
     }
@@ -210,13 +195,13 @@ contract GameController {
      * @param  _isWinner 게임 성공여부
      * @return 성공적으로 함수가 실행된 경우 true를 반환한다.
      */
-    function rewardUser(bytes2 _difficulty, bool _isWinner) internal returns (bool) {
+    function rewardUser(bytes2 _difficulty, bool _isWinner, address userAddr) internal returns (bool) {
         if(_isWinner) {
-            require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, msg.sender), "Revert from Magnet : rewardUser");
-            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender, _isWinner), "Revert from MagnetF : rewardUser");
+            require(Magnet(tokensAddr[0]).rewardTokens(_difficulty, userAddr), "Revert from Magnet : rewardUser");
+            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, userAddr, _isWinner), "Revert from MagnetF : rewardUser");
             emit WIN();
         } else {
-            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, msg.sender, _isWinner), "Revert from MagnetF : rewardUser");
+            require(MagnetField(tokensAddr[1]).rewardTokens(_difficulty, userAddr, _isWinner), "Revert from MagnetF : rewardUser");
             emit LOSE();
         }
         return true;
@@ -280,6 +265,9 @@ contract GameController {
         _totalGameCount = user.totalGameCount;
      }
 
+    /**
+     * @dev 현재 컨트랙트 상의 ETH 량을 보여준다.
+     */
      function showETH() public view returns (uint256){
          return address(this).balance;
      }
@@ -289,6 +277,9 @@ contract GameController {
         _;
     }
 
+    /**
+     * @dev deployer에게 컨트랙트가 보유한 전체 ETH를 지급한다.
+     */
      function withdrawETHALL() public onlyOwner {
          owner.transfer(address(this).balance);
      }

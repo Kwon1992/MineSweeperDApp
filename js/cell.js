@@ -1,3 +1,9 @@
+// fork from "https://github.com/nickarocho/minesweeper"
+// Original code from nickarocho
+// License Not Figured.
+// Using Open-Source Game code 
+// Analyze & Modify by KHW
+
 class  Cell {
     constructor(row, col, board) { // row : 행 개수, col : 열 개수, board : 2차원배열 형태의 보드판
         this.row = row;

@@ -26,7 +26,11 @@ contract Magnet is IERC20, IMagnet{
 
     mapping (address => uint256) private balances;
     mapping (address => mapping (address => uint256)) private allowances;
-
+    
+    /**
+     * @dev 컨트랙트 생성시 자동으로 실행되는 일회성 생성자.
+     * @param _owner 상위 컨트랙트(GameController)를 생성한 deployer.
+     */
     constructor(address _owner) public {
         owner = _owner;
         controller = msg.sender;
@@ -281,7 +285,9 @@ contract Magnet is IERC20, IMagnet{
     }
 
     /**
-     * @dev 교환 요청을 받은 경우 동작하는 함수.
+     * @dev 구매 요청을 받은 경우 동작하는 함수.
+     * @param tokensToBuy 구매하고자 하는 magnet 양
+     * @param user 구매를 요청한 user
      * @return 정상적으로 함수 동작 시 true 반환
      */
     function buyTokens(uint tokensToBuy, address user) public onlyOwner returns (bool) {
@@ -292,6 +298,12 @@ contract Magnet is IERC20, IMagnet{
         return true;
     }
 
+    /**
+     * @dev 판매 요청을 받은 경우 동작하는 함수.
+     * @param tokensToSell 판매하고자 하는 magnet 양
+     * @param user 판매를 요청한 user
+     * @return 정상적으로 함수 동작 시 true 반환
+     */
     function sellTokens(uint tokensToSell, address user) public onlyOwner returns (bool) {
         require(balances[user] - tokensToSell <= balances[user], "UnderFlow Occured");
         balances[user] -= tokensToSell;
@@ -301,6 +313,7 @@ contract Magnet is IERC20, IMagnet{
 
     /**
      * @dev 게임 시작 전 시작 비용을 내기 위한 함수
+     * @param user 게임을 시작하고자 하는 user
      */
     function payToGamePlay(address user)  public onlyOwner {
         require(balances[user] >= GAME_COST, "Not enough Balance");

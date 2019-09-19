@@ -259,6 +259,7 @@ contract MagnetField is IERC20, IMagnetField{
      * @dev 교환 요청을 받은 경우 동작하는 함수.
      * @param amount 교환하고자 하는 magnetfield 양
      * @param user 교환을 요청한 user
+     * @return 정상적으로 동작 시 true 반환
      */
     function exchangeTokens(uint256 amount, address user) public onlyOwner returns (bool) {
         require(balances[user] >= amount, "Not enough Balance");
@@ -284,6 +285,7 @@ contract MagnetField is IERC20, IMagnetField{
      * @param difficulty user가 수행한 게임의 난이도
      * @param user 보상을 주어야하는 user
      * @param isWinner 게임 성공 여부
+     * @return 정상적으로 동작 시 true 반환
      */
     function rewardTokens(bytes2 difficulty, address user, bool isWinner) public onlyOwner returns (bool) {
         if(!isWinner && checkAmounts(700, user)) {
@@ -307,6 +309,8 @@ contract MagnetField is IERC20, IMagnetField{
     /**
      * @dev 특정량의 토큰을 공급가능한지(suppliableAmount), 또한 user의 balance에서 overflow가 발생하지 않는지 확인
      * @param _amount 체크하고 싶은 토큰량
+     * @param user 잔여량 확인 대상 user
+     * @return 정상적으로 동작 시 true 반환
      */
     function checkAmounts(uint256 _amount, address user) internal view returns (bool){
         require(suppliableAmount >= _amount, "Not enough Suppliable Tokens");
