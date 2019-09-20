@@ -263,7 +263,7 @@ contract MagnetField is IERC20, IMagnetField{
      */
     function exchangeTokens(uint256 amount, address user) public onlyOwner returns (bool) {
         require(balances[user] >= amount, "Not enough Balance");
-        require(amount >= 50000, "Not Reach Minimal Condition: 10000 MFT");
+        require(amount >= 50000, "Not Reach Minimal Condition: 50000 MFT");
         balances[user] -= amount;
         suppliableAmount += amount;
         return true;
