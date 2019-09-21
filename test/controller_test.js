@@ -38,22 +38,14 @@ Unit Testing Complete
    (g. reward User Function) - WIN / LOSE
       g-1. when win the game.
       g-2. when lose the game.
-
-   ** 토큰 교환
-   추가할 test
-   h. token test
-    h-1. buy Magnet Token
-    h-2. exchange MagnetField to Magnet
-    
+   (h. exchange tokens)
+      h-1. when user meets minimal condition
+      h-2. when user does not meet minimal condition
+      h-3. when user request more than user owned token balance
 */
 
 
-// Mocha 형식 사용!
 contract('GameController', function([deployer, user1, user2]) {
-    // deployer, user1, user2에는 Account 주소가 각각 들어간다.
-    // ganache-cli를 켜놓은 경우에는 deployer에는 0번 주소 / user1에는 1번 주소 / user2에는 2번 주소가 들어감 
-    // ganache-cli를 켜놓은 경우에는 최대 10개의 Account가 있으므로, parameter로 10개까지 가능....
-
     let controller;
     let betAmountCorrect = 10 ;
     let betAmountIncorrent = 12;
@@ -63,15 +55,9 @@ contract('GameController', function([deployer, user1, user2]) {
     });
 
 
-    // TEST #1) interact to Controller.startGame function
-    // function startGame(bytes2 _difficulty, uint8 _gameCost, bytes32 _gameHex, bool[3] memory _useItem)
+    // TEST a)
     describe('startGame function checking', function() {
         it('check start func perform correct', async () => {
-            // console.log(web3.utils.asciiToHex('EZ'));
-            // console.log(web3.utils.asciiToHex('0x427F326E482582B413D44740657DEE66926ED69E82CF5D6FD46B2CF045FF1547'));
-            // problem #1 : ERR.... startGame is not a function. (WHY? : access modifier was 'private' -> change modifier to public)
-            // problem #2 ) 'EZ' is not a bytes2... (convert NEEDED -> solution web3.utils.asciiToHex() // fromAscii -> deprecated)
-            // == SOLVED!! ==
             await controller.buyMagnet({from:user1, value:10000000000000000, gas:300000});
             await controller.startGame(web3.utils.fromAscii('EZ'), betAmountCorrect, '0x427F326E482582B413D44740657DEE66926ED69E82CF5D6FD46B2CF045FF1547', [false,false,false], {from:user1});
         })
@@ -81,9 +67,8 @@ contract('GameController', function([deployer, user1, user2]) {
         })
     });
 
-    // TEST #2) 
+    // TEST b) 
     describe('View Token Balance', () => {
-        // == SOLVED!! ==
         it('Manget Tokens Balance', async () => {
             await controller.buyMagnet({from:user1, value:10000000000000000, gas:300000});
             let magnet = await controller.getMagnetBalance({from:user1});
@@ -98,10 +83,7 @@ contract('GameController', function([deployer, user1, user2]) {
         
     });
     
-    // TEST #3) 
-    // gameStart한 경우 user의 totalGameCount가 정상적으로 증가하는지 테스트.
-    // problem #1: 정상적으로 상승하지 않음...
-    // == SOLVED!! ==
+    // TEST c)
     describe('Check gameCount increase correctly', () => {
         it('game start', async () => {
             let gameCount = -1;
@@ -130,9 +112,7 @@ contract('GameController', function([deployer, user1, user2]) {
         
     });
 
-    // TEST #4) 
-    // userInfo를 불러오기
-    // == SOLVED!! ==
+    // TEST d)
     describe('Check get TotalGameCount correctly', () => {
         it('registered User', async() => {
             await controller.buyMagnet({from:user1, value:10000000000000000, gas:300000});
@@ -140,7 +120,7 @@ contract('GameController', function([deployer, user1, user2]) {
 
             let user1Info;
             await controller.getTotalGameCount({from:user1}).then(
-                (res) => { // res == txn receipt!
+                (res) => {
                     user1Info = res;
                 }
             );
@@ -162,9 +142,7 @@ contract('GameController', function([deployer, user1, user2]) {
     });
     
 
-    // TEST #5) 
-    // Item 구매하기
-    // == SOLVED!! == :정상적으로 토큰 감소됨.
+    // TEST e)
     describe('Buy Items', () => {
         it('item buy when token is sufficient', async() => {
             let user1MFBalance = 0;
@@ -182,42 +160,16 @@ contract('GameController', function([deployer, user1, user2]) {
                 console.log(user1MFBalance.toString());
 
             });
-
-            // await controller.useItems([false, true, false],{from:user1}).then((res) => {
-            //     console.log(res);
-            // });
-            // await controller.useItems([false, false, true],{from:user1}).then((res) => {
-            //     console.log(res);
-            // });
-            // await controller.useItems([true, true, false],{from:user1}).then((res) => {
-            //     console.log(res);
-            // });
-            // await controller.useItems([true, false, true],{from:user1}).then((res) => {
-            //     console.log(res);
-            // });
-            // await controller.useItems([false, true, true],{from:user1}).then((res) => {
-            //     console.log(res);
-            // });
-            // await controller.useItems([true, true, true],{from:user1}).then((res) => {
-            //     console.log(res);
-            // });
-            // await controller.getMagnetFieldBalance({from:user1}).then((res)=>{
-            //     user1MFBalance = res;
-            //     console.log(user1MFBalance.toString());
-
-            // });
         });
 
         it('item buy when token is unsufficient', async() => {
             await controller.useItems([true, false, false],{from:user2}).then((res) => {
-                console.log("******************************************************");
+                console.log("***************************************");
             });            
         });
     });
 
-    // TEST #6) 
-    // 게임결과 가져오기 
-    // == SOLVED!! ==
+    // TEST f)
     describe('Get Game Results', () => {
         it('GET RECENT 5', async () =>  {
 
@@ -250,9 +202,7 @@ contract('GameController', function([deployer, user1, user2]) {
         });
     });
 
-    // TEST #7) 
-    // 게임결과에 따른 보상주기
-    // == SOLVED!! ==
+    // TEST g)
     describe('Reward Users', () => {
         it('WIN', async () => {
             let magnetBalance;
@@ -393,10 +343,7 @@ contract('GameController', function([deployer, user1, user2]) {
         })
     })
 
-    // TEST #8)
-    // 최소수량 조건을 충족 시 토큰 교환 가능 확인
-    // 최소수량 조건을 미충족 시 토큰 교환 불가능 확인
-    // 최소수량 조건을 충족한 토큰 교환 요청을 했으나 계좌의 토큰 잔량이 부족한 경우 교환 불가능 확인
+    // TEST h)
     describe('exchange MagnetField to Magnet', () => {
         it('when user own more than 50000 MagnetField', async () => {
             let magnetBalance;
