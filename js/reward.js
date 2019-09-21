@@ -8,8 +8,7 @@ function reward(gameSHA, isWinner) {
 
     web3.eth.getTransactionCount(AdministratorAddr, function (err, nonce) {
 
-        var data = gameController.endGame.getData(gameSHA, isWinner, accountAddr); //true인 경우 왜 error???
-
+        var data = gameController.endGame.getData(gameSHA, isWinner, accountAddr);
 
         var tx = new ethereumjs.Tx({
           nonce: web3.toHex(nonce),
@@ -27,8 +26,7 @@ function reward(gameSHA, isWinner) {
         
         web3.eth.sendRawTransaction(raw, {from:AdministratorAddr}, function (err, transactionHash) {
             if(err){
-                console.log(err);
-            } else {
+            } else if(transactionHash != undefined || transactionHash != null) { 
                 runCodeForAllCells(function(cell) { 
                     if (!cell.isBomb && cell.flagged) {
                     var td = document.querySelector(`[data-row="${cell.row}"][data-col="${cell.col}"]`); 

@@ -3,12 +3,13 @@ const controllerAddr="0x6F467E5A03c5b10Bf8Ab9EFB02D93f6D1DA25C06",controllerAbi=
 
 var mapSize = "";
 var itemCost = 0;
+var seconds = 10;
 
 var levelSelected = {
   "EZ": false, 
   "NM": false, 
   "HD": false,
-}; //EZ , NM, HD // SHD
+};
 
 var itemSelected = {
   "protect" : false,
@@ -16,9 +17,7 @@ var itemSelected = {
   "revealAll" : false
 }; 
 
-var itemSelectedForContract = [false, false, false]; // protect, marker, show
-
-// connect with contracts.
+var itemSelectedForContract = [false, false, false];
 var accountAddr;
 var gameController;
 
@@ -26,31 +25,25 @@ var gameController;
 
 //Event Listeners
 window.addEventListener('load', function() {
-  //Assign Metamask to window.web3 var
   if (typeof web3 !== 'undefined') {
     window.web3 = new Web3(web3.currentProvider);
   } else {
     console.log('No web3? You should consider trying MetaMask!')
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8080"));
   }
-  // Now you can start your app & access web3 freely:
-  // startApp()?
-  console.log(web3);
-  console.log(sessionStorage);
 });
 
 
 
  
 function loadContract() {
-  gameControllerContract = web3.eth.contract(controllerAbi); // Tokens Controller
+  gameControllerContract = web3.eth.contract(controllerAbi);
   gameController = gameControllerContract.at(controllerAddr);
 }
 
-//Core Functions (핵심 함수)
+//Core Functions
 function loadUserInfo(){
   web3.eth.getAccounts(function(e,r){ 
-    console.log(r);
     document.getElementById('user-name').innerHTML =  r[0];
     accountAddr = r[0];
     getTokens();
@@ -68,7 +61,7 @@ function getTokens() {
   });
 }
 
-document.getElementById('size-btns').addEventListener('click', function(e) { // size-btns을 클릭한 경우... e : 이벤트 발생 객체
+document.getElementById('size-btns').addEventListener('click', function(e) {
 
   var targetBtn = e.target.tagName.toLowerCase() === 'img' ? e.target.parentElement : e.target;
 
@@ -130,8 +123,6 @@ document.getElementById('item-btns').addEventListener('click', async function (e
       console.log("unexpected Value :itemClick")
     }
   }
-  console.log(itemCost);
-  console.log(itemSelected);
 });
 
 
@@ -153,7 +144,6 @@ document.getElementById('purchase-btn').addEventListener('click', function() {
     purchaseAmount = parseInt(purchaseAmount);
     if(Number.isInteger(purchaseAmount)) {
       purchaseAmount = 1000000000000000 * purchaseAmount;
-      console.log(purchaseAmount);
       gameController.buyMagnet({from:accountAddr, value:purchaseAmount}, function(err, res) {
         if(err){
           alert("Error occured when buying Magnet. Maybe you Denied the txn.")
@@ -170,8 +160,7 @@ document.getElementById('purchase-btn').addEventListener('click', function() {
 });
 
 
-// 100 MagnetField == 1 MagnetField
-
+// 100 MagnetField == 1 Magnet
 document.getElementById('exchange-btn').addEventListener('click', function() {
   exchangeAmount = document.getElementById("exchangeTokens").value;
   if(!isNaN(exchangeAmount)) {
@@ -187,7 +176,6 @@ document.getElementById('exchange-btn').addEventListener('click', function() {
         } else {
           gameController.exchangeTokens(exchangeAmount, function(err,res) {
             if(err) {
-              console.log(err)
               alert("Error occured when exchange MagnetField to Magnet. Maybe your balance is insufficient")
               return;
             }
@@ -205,14 +193,12 @@ document.getElementById('sell-btn').addEventListener('click', function() {
   purchaseAmount = document.getElementById("sellingTokens").value;
   if(!isNaN(purchaseAmount)) {
     purchaseAmount = parseInt(purchaseAmount);
-    console.log(purchaseAmount);
     if(Number.isInteger(purchaseAmount)) {
       gameController.sellMagnet(purchaseAmount, function(err, res) {
         if(err){
           alert("Denied to sell the token.")
           return;
         }
-        console.log(res);
         alert("Token Sell Complete! If Token balance doesn't updated, Refresh your browser")
         loadUserInfo();
       });
@@ -231,14 +217,12 @@ document.getElementById('start-btn').addEventListener('click', function() {
   });
 
   gameController.getMagnetFieldBalance( function(e,r) {
-    console.log(r);
     curMagnetFieldBalance = r;
   });
 
 
   if(mapSize === "") {
     alert("No Level Selected");
-    console.log();
     return;
   } else if(curMagnetBalance < 10) {
     alert("Not Enough Magnet Tokens");
@@ -255,13 +239,8 @@ document.getElementById('start-btn').addEventListener('click', function() {
       }
     }
 
-    console.log(sessionStorage);
-
     gameController.getTotalGameCount({from:accountAddr}, function(err, res) {
       var gameSHA = web3.sha3(mapSize + accountAddr.toString() + (res.toNumber()+1));
-
-      console.log(`gameSHA:${gameSHA}  in index.js`);
-
       gameController.startGame(web3.fromAscii(mapSize), 10, gameSHA, itemSelectedForContract, (err, res) => {
         if(err) {
           alert("You Denied to play the game.")
@@ -274,7 +253,6 @@ document.getElementById('start-btn').addEventListener('click', function() {
             $('#timerBox').show();
             var makeTimer = setInterval(function() { 
               seconds--;
-              console.log(seconds);
               $("#seconds").html(seconds); 
               if(seconds < 0) {
                 clearInterval(makeTimer);
@@ -285,17 +263,12 @@ document.getElementById('start-btn').addEventListener('click', function() {
             }, 10000);
           }
          });
-         console.log(res); // txn reciept hash?
       });
     })
   }
 });
 
-var seconds = 10;
-function makeTimer() {
-      
 
-}
 
 
 function getGameResults() {
@@ -308,7 +281,6 @@ function getGameResults() {
    
       recentGameIndex = 0;
       if(err) {
-        console.log(err);
         return ;
       } else {
         recentGameIndex = (res.toNumber());
@@ -353,15 +325,6 @@ async function initIndexPage() {
 
 initIndexPage();
 
-
-//variables
-// Secondary Functions (부차적 함수)
-function getLink(addr) {
-    return '<a target="_blank" href=https://rinkeby.etherscan.io/address/' + addr + '>' + addr +'</a>';
-}
-  
-
-// 없앨 함수
 
 document.getElementById('magnetField-btn').addEventListener('click', function() {
   gameController.buyMagnetField(function (err,res) {
